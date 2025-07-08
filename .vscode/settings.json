@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "main.h": "c",
+        "oled_software_spi.h": "c",
+        "ti_msp_dl_config.h": "c",
+        "driverlib.h": "c",
+        "dl_core.h": "c",
+        "msp.h": "c",
+        "stdint.h": "c"
+    }
+}
