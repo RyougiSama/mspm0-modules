@@ -88,3 +88,15 @@ void GROUP1_IRQHandler(void)
         DL_GPIO_clearInterruptStatus(GPIO_Encoder_PIN_Left_E1A_PORT, GPIO_Encoder_PIN_Left_E1A_PIN);
     }
 }
+
+void TIMER_speedget_INST_IRQHandler(void)       //编码器速度获取
+{
+    switch(DL_TimerA_getPendingInterrupt(TIMER_speedget_INST))
+    {
+        case DL_TIMER_IIDX_ZERO:
+            pid_control();
+            break;
+        default:
+            break;
+    }
+}
