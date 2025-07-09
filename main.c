@@ -56,9 +56,10 @@ int main(void)
     delay_ms(2000);
     OLED_Clear();
 
-    // Motor_On();
-    // pid_init(&g_motorA, DELTA_PID, 10, 5, 3);
-    // motor_target_set(100,-100);
+    Motor_On();
+    pid_init(&g_motorA, DELTA_PID, 10, 5, 3);
+    pid_init(&g_motorB, DELTA_PID, 10, 5, 3);
+    motor_target_set(30,-30);
 
     while (1)
     {
