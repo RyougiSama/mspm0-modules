@@ -3,7 +3,7 @@
 #include <string.h>
 #include "ti_msp_dl_config.h"
 #include "ADC.h"
-#include "Time.h"
+// #include "Time.h"
 /**************************** 传感器版本配置 ****************************/
 #define Class		    0  // 经典版传感器
 #define Younth      1  // 青春版传感器
@@ -80,9 +80,9 @@ void Task_tick(No_MCU_Sensor* sensor);                          // 时基更新�
 #endif
 
 // 用户接口函数
-unsigned char Get_Digtal_For_User(No_MCU_Sensor* sensor);          									// 获取数字量
+unsigned char Get_Digtal_For_User(No_MCU_Sensor* sensor);                           // 获取数字量
 unsigned char Get_Normalize_For_User(No_MCU_Sensor* sensor,unsigned short* result); // 获取归一化值
-unsigned char Get_Anolog_Value(No_MCU_Sensor* sensor,unsigned short* result);       // 获取模拟值
+unsigned char Get_Analog_Value(No_MCU_Sensor* sensor,unsigned short* result);       // 获取模拟值
 
 #ifdef __cplusplus
 }
