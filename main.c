@@ -33,9 +33,6 @@
 #include "ti_msp_dl_config.h"
 #include "main.h"
 
-uint32_t motor_ms, oled_ms;
-uint16_t test_duty = 10000;
-
 int main(void)
 {
     // sys initialization
@@ -53,57 +50,8 @@ int main(void)
     delay_ms(2000);
     OLED_Clear();
 
-    Motor_On();
-
     while (1)
     {
-        if (tick_ms - motor_ms >= 5000)
-        {
-            motor_ms = tick_ms;
-            if (test_duty >= 35000)
-            {
-                test_duty = 10000;
-            }
-            else
-            {
-                test_duty += 5000;
-            }
-            motorA_duty(test_duty);
-            motorB_duty(test_duty);
-        }
-
-        if (tick_ms - oled_ms >= 500)
-        {
-            oled_ms = tick_ms;
-            OLED_Clear();
-            OLED_ShowString(8, 2, (uint8_t *)"Encoder1:", 16);
-            OLED_ShowString(8, 4, (uint8_t *)"Encoder2:", 16);
-            OLED_ShowNum(80, 2, (uint32_t)motorA.now, 3, 16);
-            OLED_ShowNum(80, 4, (uint32_t)motorB.now, 3, 16);
-        }
-        if (tick_ms - motor_ms >= 5000)
-        {
-            motor_ms = tick_ms;
-            if (test_duty >= 35000)
-            {
-                test_duty = 10000;
-            }
-            else
-            {
-                test_duty += 5000;
-            }
-            motorA_duty(test_duty);
-            motorB_duty(test_duty);
-        }
-
-        if (tick_ms - oled_ms >= 500)
-        {
-            oled_ms = tick_ms;
-            OLED_Clear();
-            OLED_ShowString(8, 2, (uint8_t *)"Encoder1:", 16);
-            OLED_ShowString(8, 4, (uint8_t *)"Encoder2:", 16);
-            OLED_ShowNum(80, 2, (uint32_t)motorA.now, 3, 16);
-            OLED_ShowNum(80, 4, (uint32_t)motorB.now, 3, 16);
-        }
+        
     }
 }

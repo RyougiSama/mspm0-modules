@@ -6,6 +6,7 @@
         "driverlib.h": "c",
         "dl_core.h": "c",
         "msp.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "clock.h": "c"
     }
 }
