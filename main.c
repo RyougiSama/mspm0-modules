@@ -50,6 +50,7 @@ int main(void)
     // peripheral initialization
     OLED_Init();
     Motor_Init();
+    Encoder_Init();
     // WIT_Init();
 
     OLED_ShowString(0, 0, (uint8_t *)"Initializing...", 16);

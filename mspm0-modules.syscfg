@@ -159,6 +159,7 @@ TIMER1.$name              = "TIMER_speedget";
 TIMER1.timerMode          = "PERIODIC";
 TIMER1.timerPeriod        = "50 ms";
 TIMER1.timerClkPrescale   = 100;
+TIMER1.interrupts         = ["ZERO"];
 TIMER1.peripheral.$assign = "TIMG0";
 
 /**

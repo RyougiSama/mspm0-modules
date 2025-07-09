@@ -96,13 +96,13 @@ void pid_control()
     g_encoder_A = 0;
     g_encoder_B = 0;
     // 3.调用PID控制器进行计算
-    // pid_cal(&g_motorA);
-    // pid_cal(&g_motorB);
-    // pidout_limit(&g_motorA);
-    // pidout_limit(&g_motorB);
-    // // 4.将PID输出值赋给电机PWM驱动
-    // motorA_duty(g_motorA.out);
-    // motorB_duty(g_motorB.out);
+    pid_cal(&g_motorA);
+    pid_cal(&g_motorB);
+    pidout_limit(&g_motorA);
+    pidout_limit(&g_motorB);
+    // 4.将PID输出值赋给电机PWM驱动
+    MotorA_Duty(g_motorA.out);
+    MotorB_Duty(g_motorB.out);
 }
 
 void pid_cal(Pid_t *pid)
