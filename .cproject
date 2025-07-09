@@ -48,6 +48,7 @@
                                     <listOptionValue value="${COM_TI_MSPM0_SDK_INCLUDE_PATH}"/>
                                     <listOptionValue value="${SYSCONFIG_TOOL_INCLUDE_PATH}"/>
                                     <listOptionValue value="${PROJECT_ROOT}/Drivers/MOTOR"/>
+                                    <listOptionValue value="${PROJECT_ROOT}/Drivers/KEY"/>
                                     <listOptionValue value="${PROJECT_ROOT}/Drivers/WIT"/>
                                     <listOptionValue value="${PROJECT_ROOT}/Drivers/OLED_Hardware_I2C"/>
                                     <listOptionValue value="${PROJECT_ROOT}"/>

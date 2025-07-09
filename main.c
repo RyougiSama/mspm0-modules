@@ -32,9 +32,12 @@
 
 #include "ti_msp_dl_config.h"
 #include "main.h"
+#include "stdio.h"
 
-uint32_t motor_ms, oled_ms;
+uint32_t motor_ms, oled_ms,key_ms;
 uint16_t test_duty = 10000;
+float val = 0;
+char oled_buffer[20];
 
 int main(void)
 {
@@ -53,57 +56,39 @@ int main(void)
     delay_ms(2000);
     OLED_Clear();
 
-    Motor_On();
+    // Motor_On();
+    // pid_init(&g_motorA, DELTA_PID, 10, 5, 3);
+    // motor_target_set(100,-100);
 
     while (1)
-    {
-        if (tick_ms - motor_ms >= 5000)
         {
-            motor_ms = tick_ms;
-            if (test_duty >= 35000)
-            {
-                test_duty = 10000;
-            }
-            else
-            {
-                test_duty += 5000;
-            }
-            motorA_duty(test_duty);
-            motorB_duty(test_duty);
-        }
+       
+
+        
+        Key_PID_MDF();
 
         if (tick_ms - oled_ms >= 500)
         {
             oled_ms = tick_ms;
             OLED_Clear();
-            OLED_ShowString(8, 2, (uint8_t *)"Encoder1:", 16);
-            OLED_ShowString(8, 4, (uint8_t *)"Encoder2:", 16);
-            OLED_ShowNum(80, 2, (uint32_t)motorA.now, 3, 16);
-            OLED_ShowNum(80, 4, (uint32_t)motorB.now, 3, 16);
-        }
-        if (tick_ms - motor_ms >= 5000)
-        {
-            motor_ms = tick_ms;
-            if (test_duty >= 35000)
-            {
-                test_duty = 10000;
-            }
-            else
-            {
-                test_duty += 5000;
-            }
-            motorA_duty(test_duty);
-            motorB_duty(test_duty);
+            OLED_ShowString(4, 0, (uint8_t *)"En1:", 16);
+            OLED_ShowString(4, 2, (uint8_t *)"En2:", 16);
+            
+            OLED_ShowNum(40, 0, (uint32_t)g_motorA.now, 3, 16);
+            OLED_ShowNum(40, 2, (uint32_t)g_motorB.now, 3, 16);
+            // --- 显示I值 ---
+            sprintf((char *)oled_buffer, "AP:%-4.2f", g_motorA.p); 
+            OLED_ShowString(0, 4, (uint8_t*)oled_buffer, 16);
+
+            // --- 显示I值 ---
+            sprintf((char *)oled_buffer, "AI:%-4.2f", g_motorA.i);
+            OLED_ShowString(65, 4, (uint8_t*)oled_buffer, 16);
+
+            // --- 显示D值 ---
+            sprintf((char *)oled_buffer, "AD:%-4.2f", g_motorA.d);
+            OLED_ShowString(65, 6, (uint8_t*)oled_buffer, 16);
         }
 
-        if (tick_ms - oled_ms >= 500)
-        {
-            oled_ms = tick_ms;
-            OLED_Clear();
-            OLED_ShowString(8, 2, (uint8_t *)"Encoder1:", 16);
-            OLED_ShowString(8, 4, (uint8_t *)"Encoder2:", 16);
-            OLED_ShowNum(80, 2, (uint32_t)motorA.now, 3, 16);
-            OLED_ShowNum(80, 4, (uint32_t)motorB.now, 3, 16);
-        }
+        
     }
 }
