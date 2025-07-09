@@ -50,15 +50,17 @@ int main(void)
     // peripheral initialization
     OLED_Init();
     Motor_Init();
+    Encoder_Init();
     // WIT_Init();
 
     OLED_ShowString(0, 0, (uint8_t *)"Initializing...", 16);
     delay_ms(2000);
     OLED_Clear();
 
-    // Motor_On();
-    // pid_init(&g_motorA, DELTA_PID, 10, 5, 3);
-    // motor_target_set(100,-100);
+    Motor_On();
+    pid_init(&g_motorA, DELTA_PID, 10, 5, 3);
+    pid_init(&g_motorB, DELTA_PID, 10, 5, 3);
+    motor_target_set(30,-30);
 
     while (1)
         {
@@ -89,6 +91,5 @@ int main(void)
             OLED_ShowString(65, 6, (uint8_t*)oled_buffer, 16);
         }
 
-        
     }
 }
