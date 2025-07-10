@@ -1,5 +1,6 @@
 #include "motor.h"
 #include "pid.h"
+#include "uart_pid.h"
 
 #define motor_max_duty 50000
 #define MAX_DUTY 50000
@@ -92,7 +93,7 @@ void pid_control()
         g_motorB.now = g_encoder_B;
     } else {
         g_motorB.now = -g_encoder_B;
-    } // 修改过
+    } 
     g_encoder_A = 0;
     g_encoder_B = 0;
     // 3.调用PID控制器进行计算
@@ -103,6 +104,8 @@ void pid_control()
     // 4.将PID输出值赋给电机PWM驱动
     MotorA_Duty(g_motorA.out);
     MotorB_Duty(g_motorB.out);
+
+    Serial_PID();
 }
 
 void pid_cal(Pid_t *pid)

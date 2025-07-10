@@ -6,8 +6,8 @@
 
 uint8_t g_motorA_dir = 1;
 uint8_t g_motorB_dir = 1;
-uint32_t g_encoder_A = 0;
-uint32_t g_encoder_B = 0;
+int g_encoder_A = 0;
+int g_encoder_B = 0;
 
 void Motor_Init(void)
 {

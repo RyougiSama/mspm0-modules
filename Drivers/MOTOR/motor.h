@@ -11,7 +11,7 @@ void Encoder_Init(void);
 
 extern uint8_t g_motorA_dir;
 extern uint8_t g_motorB_dir;
-extern uint32_t g_encoder_A;
-extern uint32_t g_encoder_B;
+extern int g_encoder_A;
+extern int g_encoder_B;
 
 #endif

@@ -7,6 +7,7 @@
 #include "wit.h"
 #include "motor.h"
 #include "pid.h"
- #include "key.h"
+#include "key.h"
 
+void OLED_Task(void);
 #endif  /* #ifndef _MAIN_H_ */

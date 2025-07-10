@@ -1,6 +1,8 @@
 
  #include "key.h"
 
+
+
 // Make sure you have access to a global millisecond timer.
 // If g_tick_ms is defined in main.c, you need this line in key.c
 
@@ -75,13 +77,13 @@ uint8_t Matrix_Key_Scan(void)
     return current_raw_key; 
 }
 
-
+extern uint8_t key_mode;
 
 void Key_PID_MDF()
 {
     static uint8_t Key_Val_Old = 0;
     static uint32_t key_ms = 0;
-    static uint8_t key_mode = 0;
+    
    if(tick_ms - key_ms >= 20)
    {
     key_ms = tick_ms;
@@ -89,7 +91,7 @@ void Key_PID_MDF()
      
     if(key_val == Key_Val_Old)
         return;
-        if(key_mode == 0)        //进入pid调参模式 
+        if(key_mode == 0)        //进入motorA调参模式 
         {
             switch (key_val)            
              { 
@@ -128,35 +130,25 @@ void Key_PID_MDF()
                 break;
             
             case 9:
-                g_motorB.p += 0.5;
+                g_motorA.d += 0.5;
                 break;
 
             case 10:
-                g_motorB.p += 0.01;
+                g_motorA.d += 0.01;
                 break;
 
             case 11:
-                g_motorB.p -= 0.5;
+                g_motorA.d -= 0.5;
                 break;
 
             case 12:
-                g_motorB.p -= 0.01;
+                g_motorA.d -= 0.01;
                 break;
+            
 
-            case 13:
-                g_motorB.i += 0.5;
-                break;
-
-            case 14:
-                g_motorB.i += 0.01;
-                break;
-
-            case 15:
-                g_motorB.i -= 0.5;
-                break;
-
+          
             case 16:
-                g_motorB.i -= 0.01;
+                key_mode = 1;
                 break;
             default:
                 break;
@@ -167,22 +159,71 @@ void Key_PID_MDF()
         {
             switch (key_val)            
              { 
-            // case 1:
-            //     mode+=1;
-            //     if(mode>=4)mode=4;
-            //     break;
-            // case 2:
-            //     mode-=1;
-            //     if(mode<=0)mode=0;
-            //     break;
-            // case 3:
-            //     Serial_JY61P_Zero_Yaw();
-            //     break;
-            // case 4:
-            //     start=1;
-            //     break;
-            // default:
-            //     break;
+            case 1:
+                g_motorB.p += 0.5;
+                break;
+
+            case 2:
+                g_motorB.p += 0.01;
+                break;
+
+            case 3:
+                g_motorB.p -= 0.5;
+                break;
+
+            case 4:
+                g_motorB.p -= 0.01;
+                break;
+            
+            case 5:
+                g_motorB.i += 0.5;
+                break;
+
+            case 6:
+                g_motorB.i += 0.01;
+                break;
+
+            case 7:
+                g_motorB.i -= 0.5;
+                break;
+
+            case 8:
+                g_motorB.i -= 0.01;
+                break;
+            
+            case 9:
+                g_motorB.d += 0.5;
+                break;
+
+            case 10:
+                g_motorB.d += 0.01;
+                break;
+
+            case 11:
+                g_motorB.d -= 0.5;
+                break;
+
+            case 12:
+                g_motorB.d -= 0.01;
+                break;
+            
+            case 16:
+                key_mode = 2;
+                break;
+            default:
+                break;
+            }
+        }
+        else if(key_mode == 2)
+        {
+
+            switch (key_val) 
+            {
+                case 16:
+                key_mode = 0;
+                break;
+            default:
+                break;
             }
         }
     Key_Val_Old=key_val;
