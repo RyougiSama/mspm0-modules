@@ -41,18 +41,24 @@ void pid_init(Pid_t *pid, PidMode mode, float p, float i, float d)
 // 设置两个电机的目标速度
 void motor_target_set(int spe1, int spe2)
 {
-    if (spe1 >= 0) {
+    if (spe1 >= 0)
+    {
         g_motorA_dir = 1;
         g_motorA.target = spe1;
-    } else {
+    }
+    else
+    {
         g_motorA_dir = 0;
         g_motorA.target = -spe1;
     }
 
-    if (spe2 >= 0) {
+    if (spe2 >= 0)
+    {
         g_motorB_dir = 1;
         g_motorB.target = spe2;
-    } else {
+    }
+    else
+    {
         g_motorB_dir = 0;
         g_motorB.target = -spe2;
     }
@@ -101,16 +107,22 @@ void pid_control()
 
     // if(ready1==1)			//openmv中
     // track();
-    if (g_motorA_dir) {
+    if (g_motorA_dir)
+    {
         g_motorA.now = g_encoder_A;
-    } else {
+    }
+    else
+    {
         g_motorA.now = -g_encoder_A;
     } // 修改过
-    if (g_motorB_dir) {
+    if (g_motorB_dir)
+    {
         g_motorB.now = g_encoder_B;
-    } else {
+    }
+    else
+    {
         g_motorB.now = -g_encoder_B;
-    } 
+    }
     g_encoder_A = 0;
     g_encoder_B = 0;
     // 3.调用PID控制器进行计算
