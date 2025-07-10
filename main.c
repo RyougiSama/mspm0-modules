@@ -60,9 +60,9 @@ int main(void)
     OLED_Clear();
 
     Motor_On();
-    pid_init(&g_motorA, DELTA_PID, 10, 5, 0);
+    pid_init(&g_motorA, DELTA_PID, 0, 0, 0);
     // pid_init(&g_motorB, DELTA_PID, 10, 5, 3);
-    motor_target_set(50,0);
+    motor_target_set(120,0);
 
     while (1)
     {
@@ -102,7 +102,7 @@ void OLED_Task(void)
         else if(key_mode == 1)
         {
             OLED_ShowString(4, 0, (uint8_t *)"En2:", 16);
-            OLED_ShowNum(40, 2, (uint32_t)g_motorB.now, 3, 16);
+            OLED_ShowNum(40, 0, (uint32_t)g_motorB.now, 3, 16);
 
             // --- 显示P值 ---
             sprintf((char *)oled_buffer, "BP:%-4.2f", g_motorB.p); 

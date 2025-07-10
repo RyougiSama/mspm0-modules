@@ -145,7 +145,10 @@ void Key_PID_MDF()
                 g_motorA.d -= 0.01;
                 break;
             
+            case 14:
+                pid_init(&g_motorA,DELTA_PID,g_motorA.p,g_motorA.i,g_motorA.d);
 
+                break;
           
             case 16:
                 key_mode = 1;
