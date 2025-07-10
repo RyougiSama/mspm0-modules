@@ -68,15 +68,17 @@ void Oled_Motor_Test()
 void Oled_Ganv_Test()
 {
     static uint32_t oled_ms = 0;
-    if (tick_ms - oled_ms < 500) return;
+    if (tick_ms - oled_ms < 500)
+        return;
     oled_ms = tick_ms;
 
     No_Mcu_Ganv_Sensor_Task_Without_tick(&g_ganv_sensor);
     Get_Analog_Value(&g_ganv_sensor, g_analog_value);
     g_digital_value = Get_Digtal_For_User(&g_ganv_sensor);
-    for (uint8_t i = 0; i < 8; ++i) {
+    for (uint8_t i = 0; i < 8; ++i)
+    {
         OLED_ShowNum(0, i, g_analog_value[i], 4, 8);
-        OLED_ShowNum(6*5, i, 0x01 & (g_digital_value >> i) ? 1 : 0, 1, 8);
+        OLED_ShowNum(6 * 5, i, 0x01 & (g_digital_value >> i) ? 1 : 0, 1, 8);
     }
     // OLED_ShowString(0, 4, (uint8_t *)"Digital:", 16);
 }
@@ -109,17 +111,16 @@ int main(void)
 
     while (1)
     {
-            Key_PID_MDF();
-            OLED_Task();
-            if(motor_status)
+        Key_PID_MDF();
+        OLED_Task();
+        if (motor_status)
+        {
+            if (tick_ms - motor_start >= 5000)
             {
-                if(tick_ms - motor_start >= 5000)
-                {
-                    motor_status = 0;
-                    Motor_Stop();
-                }
+                motor_status = 0;
+                Motor_Stop();
             }
-            
+        }
     }
 }
 
