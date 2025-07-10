@@ -96,7 +96,7 @@ int main(void)
     Motor_Init();
     Encoder_Init();
     Adc_Init();
-    // WIT_Init();
+    WIT_Init();
     No_MCU_Ganv_Sensor_Init_Frist(&g_ganv_sensor);
     No_MCU_Ganv_Sensor_Init(&g_ganv_sensor, g_calibrated_white, g_calibrated_black);
 
