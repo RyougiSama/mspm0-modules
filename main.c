@@ -66,23 +66,17 @@ void Oled_Motor_Test()
 
 void Oled_Ganv_Test()
 {
-    // static unsigned short analog_value[8];
-    // No_Mcu_Ganv_Sensor_Task_Without_tick(&g_ganv_sensor); // 执行传感器任务
-    // if (Get_Analog_Value(&g_ganv_sensor, analog_value)) {
-    //     for (int i = 0; i < 8; i++) {
-    //         OLED_ShowNum(0, i, analog_value[i], 4, 8);
-    //     }
-    // }
+    static uint32_t oled_ms = 0;
+    if (tick_ms - oled_ms < 500) return;
+    oled_ms = tick_ms;
+
     No_Mcu_Ganv_Sensor_Task_Without_tick(&g_ganv_sensor);
     Get_Analog_Value(&g_ganv_sensor, g_analog_value);
-    OLED_ShowNum(0, 0, g_analog_value[0], 4, 8);
-    OLED_ShowNum(0, 1, g_analog_value[1], 4, 8);
-    OLED_ShowNum(0, 2, g_analog_value[2], 4, 8);
-    OLED_ShowNum(0, 3, g_analog_value[3], 4, 8);
-    OLED_ShowNum(0, 4, g_analog_value[4], 4, 8);
-    OLED_ShowNum(0, 5, g_analog_value[5], 4, 8);
-    OLED_ShowNum(0, 6, g_analog_value[6], 4, 8);
-    OLED_ShowNum(0, 7, g_analog_value[7], 4, 8);
+    g_digital_value = Get_Digtal_For_User(&g_ganv_sensor);
+    for (uint8_t i = 0; i < 8; ++i) {
+        OLED_ShowNum(0, i, g_analog_value[i], 4, 8);
+        OLED_ShowNum(6*5, i, 0x01 & (g_digital_value >> i) ? 1 : 0, 1, 8);
+    }
     // OLED_ShowString(0, 4, (uint8_t *)"Digital:", 16);
 }
 
@@ -104,66 +98,62 @@ int main(void)
     No_MCU_Ganv_Sensor_Init(&g_ganv_sensor, g_calibrated_white, g_calibrated_black);
 
     OLED_ShowString(0, 0, (uint8_t *)"Initializing...", 16);
-    delay_ms(2000);
+    delay_ms(1000);
     OLED_Clear();
 
     Motor_On();
     pid_init(&g_motorA, DELTA_PID, 10, 5, 0);
     // pid_init(&g_motorB, DELTA_PID, 10, 5, 3);
-    motor_target_set(50,0);
+    motor_target_set(50, 0);
 
-    while (1)
-    {
-            Key_PID_MDF();
-            OLED_Task();
-    
+    while (1) {
+        // Key_PID_MDF();
+        // OLED_Task();
+        Oled_Ganv_Test();
     }
 }
-
 
 void OLED_Task(void)
 {
     static uint32_t oled_ms = 0;
-    if(tick_ms - oled_ms >= 500)
+    if (tick_ms - oled_ms >= 500)
     {
         oled_ms = tick_ms;
         OLED_Clear();
-        if(key_mode == 0)
+        if (key_mode == 0)
         {
             OLED_ShowString(4, 0, (uint8_t *)"En1:", 16);
-           
+
             OLED_ShowNum(40, 0, (uint32_t)g_motorA.now, 3, 16);
 
             // --- 显示P值 ---
-            sprintf((char *)oled_buffer, "AP:%-4.2f", g_motorA.p); 
-            OLED_ShowString(0, 4, (uint8_t*)oled_buffer, 16);
+            sprintf((char *)oled_buffer, "AP:%-4.2f", g_motorA.p);
+            OLED_ShowString(0, 4, (uint8_t *)oled_buffer, 16);
 
             // --- 显示I值 ---
             sprintf((char *)oled_buffer, "AI:%-4.2f", g_motorA.i);
-            OLED_ShowString(65, 4, (uint8_t*)oled_buffer, 16);
+            OLED_ShowString(65, 4, (uint8_t *)oled_buffer, 16);
 
             // --- 显示D值 ---
             sprintf((char *)oled_buffer, "AD:%-4.2f", g_motorA.d);
-            OLED_ShowString(0, 6, (uint8_t*)oled_buffer, 16);
-
+            OLED_ShowString(0, 6, (uint8_t *)oled_buffer, 16);
         }
-        else if(key_mode == 1)
+        else if (key_mode == 1)
         {
             OLED_ShowString(4, 0, (uint8_t *)"En2:", 16);
             OLED_ShowNum(40, 2, (uint32_t)g_motorB.now, 3, 16);
 
             // --- 显示P值 ---
-            sprintf((char *)oled_buffer, "BP:%-4.2f", g_motorB.p); 
-            OLED_ShowString(0, 4, (uint8_t*)oled_buffer, 16);
+            sprintf((char *)oled_buffer, "BP:%-4.2f", g_motorB.p);
+            OLED_ShowString(0, 4, (uint8_t *)oled_buffer, 16);
 
             // --- 显示I值 ---
             sprintf((char *)oled_buffer, "BI:%-4.2f", g_motorB.i);
-            OLED_ShowString(65, 4, (uint8_t*)oled_buffer, 16);
+            OLED_ShowString(65, 4, (uint8_t *)oled_buffer, 16);
 
             // --- 显示D值 ---
             sprintf((char *)oled_buffer, "BD:%-4.2f", g_motorB.d);
-            OLED_ShowString(0, 6, (uint8_t*)oled_buffer, 16);
+            OLED_ShowString(0, 6, (uint8_t *)oled_buffer, 16);
         }
-            
     }
 }
