@@ -206,9 +206,85 @@ void Key_PID_MDF()
             case 12:
                 g_motorA.d -= 0.01;
                 break;
+            
+            case 14:
+                pid_init(&g_motorA,DELTA_PID,g_motorA.p,g_motorA.i,g_motorA.d);
 
+                break;
+            case 15:
+                motor_status = 1;
+                Motor_On();
+                pid_init(&g_motorA, DELTA_PID, 2.05, 17.45, 0);
+                pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
+                motor_target_set(100,100);
+                motor_start = tick_ms;
+                break;
             case 16:
                 key_mode = 1;
+                break;
+            default:
+                break;
+
+            }    
+        }
+        else if(key_mode == 1)
+        {
+            switch (key_val)            
+             { 
+            case 1:
+                g_motorB.p += 0.5;
+                break;
+
+            case 2:
+                g_motorB.p += 0.01;
+                break;
+
+            case 3:
+                g_motorB.p -= 0.5;
+                break;
+
+            case 4:
+                g_motorB.p -= 0.01;
+                break;
+            
+            case 5:
+                g_motorB.i += 0.5;
+                break;
+
+            case 6:
+                g_motorB.i += 0.01;
+                break;
+
+            case 7:
+                g_motorB.i -= 0.5;
+                break;
+
+            case 8:
+                g_motorB.i -= 0.01;
+                break;
+            
+            case 9:
+                g_motorB.d += 0.5;
+                break;
+
+            case 10:
+                g_motorB.d += 0.01;
+                break;
+
+            case 11:
+                g_motorB.d -= 0.5;
+                break;
+
+            case 12:
+                g_motorB.d -= 0.01;
+                break;
+            case 14:
+                pid_init(&g_motorB,DELTA_PID,g_motorB.p,g_motorB.i,g_motorB.d);
+                
+                break;
+
+            case 16:
+                key_mode = 2;
                 break;
             default:
                 break;

@@ -26,6 +26,9 @@ void Motor_Stop(void)
     DL_GPIO_clearPins(GPIO_motor_PORT, GPIO_motor_PIN_AIN2_PIN);
     DL_GPIO_clearPins(GPIO_motor_PORT, GPIO_motor_PIN_BIN1_PIN);
     DL_GPIO_clearPins(GPIO_motor_PORT, GPIO_motor_PIN_BIN2_PIN);
+    pid_reset(&g_motorA);
+    pid_reset(&g_motorB);
+    
 }
 
 static void Set_Duty(float duty, uint8_t channel)

@@ -18,6 +18,7 @@ typedef struct {
     PidMode pid_mode;
 } Pid_t;
 
+void pid_reset(Pid_t *pid);
 void pid_cal(Pid_t *pid);
 void pid_control(void);
 void pid_init(Pid_t *pid, PidMode mode, float p, float i, float d);

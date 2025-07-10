@@ -12,6 +12,22 @@ float Pitch, Roll, Yaw;
 uint8_t RollL, RollH, PitchL, PitchH, YawL, YawH, VL, VH, SUM;
 uint8_t ready1 = 1; // 灰度移植完删除
 
+void pid_reset(Pid_t *pid)
+{
+    // --- 清空历史误差 ---
+    // 这是PID“记忆”的核心部分
+    pid->error[0] = 0.0f;
+    pid->error[1] = 0.0f;
+    pid->error[2] = 0.0f;
+
+    // --- 清空各项输出和总输出 ---
+    // 对于增量式PID，清空pid->out至关重要，因为它作为下一次计算的基础 u(k-1)
+    // 对于位置式PID，清空pid->iout至关重要，因为它就是积分累加项
+    pid->pout = 0.0f;
+    pid->iout = 0.0f;
+    pid->dout = 0.0f;
+    pid->out = 0.0f;
+}
 
 void pid_init(Pid_t *pid, PidMode mode, float p, float i, float d)
 {
@@ -19,6 +35,7 @@ void pid_init(Pid_t *pid, PidMode mode, float p, float i, float d)
     pid->p = p;
     pid->i = i;
     pid->d = d;
+    pid_reset(pid);
 }
 
 // 设置两个电机的目标速度

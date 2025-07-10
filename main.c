@@ -41,7 +41,8 @@ uint16_t test_duty = 10000;
 float val = 0;
 char oled_buffer[20];
 uint8_t key_mode = 0;
-// uint8_t motor_key = 0;
+uint8_t motor_status = 1;
+uint32_t motor_start = 9999999;
 
 void Oled_Motor_Test()
 {
@@ -101,15 +102,24 @@ int main(void)
     delay_ms(1000);
     OLED_Clear();
 
-    Motor_On();
-    pid_init(&g_motorA, DELTA_PID, 10, 5, 0);
-    // pid_init(&g_motorB, DELTA_PID, 10, 5, 3);
-    motor_target_set(50, 0);
+    // Motor_On();
+    // pid_init(&g_motorA, DELTA_PID, 2.05, 17.45, 0);
+    // pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
+    // motor_target_set(100,100);
 
-    while (1) {
-        // Key_PID_MDF();
-        // OLED_Task();
-        Oled_Ganv_Test();
+    while (1)
+    {
+            Key_PID_MDF();
+            OLED_Task();
+            if(motor_status)
+            {
+                if(tick_ms - motor_start >= 5000)
+                {
+                    motor_status = 0;
+                    Motor_Stop();
+                }
+            }
+            
     }
 }
 
@@ -141,7 +151,7 @@ void OLED_Task(void)
         else if (key_mode == 1)
         {
             OLED_ShowString(4, 0, (uint8_t *)"En2:", 16);
-            OLED_ShowNum(40, 2, (uint32_t)g_motorB.now, 3, 16);
+            OLED_ShowNum(40, 0, (uint32_t)g_motorB.now, 3, 16);
 
             // --- 显示P值 ---
             sprintf((char *)oled_buffer, "BP:%-4.2f", g_motorB.p);
