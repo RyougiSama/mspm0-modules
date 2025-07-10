@@ -34,6 +34,7 @@
 #include "main.h"
 #include "stdio.h"
 #include "ganv_user.h"
+#include "adc.h"
 
 uint32_t motor_ms, oled_ms, key_ms;
 uint16_t test_duty = 10000;
@@ -63,14 +64,23 @@ void Oled_Motor_Test()
 
 void Oled_Ganv_Test()
 {
-    static unsigned short analog_value[8];
-    No_Mcu_Ganv_Sensor_Task_Without_tick(&g_ganv_sensor); // 执行传感器任务
-    OLED_Clear();
-    if (Get_Analog_Value(&g_ganv_sensor, analog_value)) {
-        for (int i = 0; i < 8; i++) {
-            OLED_ShowNum(0, i, analog_value[i], 4, 8);
-        }
-    }
+    // static unsigned short analog_value[8];
+    // No_Mcu_Ganv_Sensor_Task_Without_tick(&g_ganv_sensor); // 执行传感器任务
+    // if (Get_Analog_Value(&g_ganv_sensor, analog_value)) {
+    //     for (int i = 0; i < 8; i++) {
+    //         OLED_ShowNum(0, i, analog_value[i], 4, 8);
+    //     }
+    // }
+    No_Mcu_Ganv_Sensor_Task_Without_tick(&g_ganv_sensor);
+    Get_Analog_Value(&g_ganv_sensor, g_analog_value);
+    OLED_ShowNum(0, 0, g_analog_value[0], 4, 8);
+    OLED_ShowNum(0, 1, g_analog_value[1], 4, 8);
+    OLED_ShowNum(0, 2, g_analog_value[2], 4, 8);
+    OLED_ShowNum(0, 3, g_analog_value[3], 4, 8);
+    OLED_ShowNum(0, 4, g_analog_value[4], 4, 8);
+    OLED_ShowNum(0, 5, g_analog_value[5], 4, 8);
+    OLED_ShowNum(0, 6, g_analog_value[6], 4, 8);
+    OLED_ShowNum(0, 7, g_analog_value[7], 4, 8);
     // OLED_ShowString(0, 4, (uint8_t *)"Digital:", 16);
 }
 
@@ -86,8 +96,10 @@ int main(void)
     OLED_Init();
     Motor_Init();
     Encoder_Init();
+    Adc_Init();
     // WIT_Init();
     No_MCU_Ganv_Sensor_Init_Frist(&g_ganv_sensor);
+    No_MCU_Ganv_Sensor_Init(&g_ganv_sensor, g_calibrated_white, g_calibrated_black);
 
     // Motor_On();
     // pid_init(&g_motorA, DELTA_PID, 10, 5, 3);
@@ -103,7 +115,7 @@ int main(void)
         {
             oled_ms = tick_ms;
             // Oled_Motor_Test();
-            Oled_Ganv_Test();
+            // Oled_Ganv_Test();
         }
     }
 }

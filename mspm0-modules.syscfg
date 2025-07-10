@@ -41,12 +41,13 @@ const mux8       = system.clockTree["HSCLKMUX"];
 mux8.inputSelect = "HSCLKMUX_SYSPLL2X";
 
 ADC121.$name                             = "ADC1";
-ADC121.repeatMode                        = true;
 ADC121.sampClkDiv                        = "DL_ADC12_CLOCK_DIVIDE_8";
 ADC121.adcMem0_name                      = "ADC_Channel0";
 ADC121.powerDownMode                     = "DL_ADC12_POWER_DOWN_MODE_MANUAL";
-ADC121.adcPin0Config.$name               = "ti_driverlib_gpio_GPIOPinGeneric4";
+ADC121.sampleTime0                       = "125 us";
+ADC121.enabledInterrupts                 = ["DL_ADC12_INTERRUPT_MEM0_RESULT_LOADED"];
 ADC121.adcPin0Config.hideOutputInversion = scripting.forceWrite(false);
+ADC121.adcPin0Config.$name               = "ti_driverlib_gpio_GPIOPinGeneric4";
 
 const Board = scripting.addModule("/ti/driverlib/Board", {}, false);
 
@@ -136,12 +137,15 @@ GPIO4.associatedPins[7].assignedPort     = "PORTA";
 GPIO4.associatedPins[7].assignedPin      = "25";
 GPIO4.associatedPins[7].internalResistor = "PULL_UP";
 
-GPIO5.$name                   = "Gray_Address";
-GPIO5.port                    = "PORTB";
+GPIO5.$name                         = "Gray_Address";
+GPIO5.port                          = "PORTB";
 GPIO5.associatedPins.create(3);
-GPIO5.associatedPins[0].$name = "PIN_0";
-GPIO5.associatedPins[1].$name = "PIN_1";
-GPIO5.associatedPins[2].$name = "PIN_2";
+GPIO5.associatedPins[0].$name       = "PIN_0";
+GPIO5.associatedPins[0].pin.$assign = "PB11";
+GPIO5.associatedPins[1].$name       = "PIN_1";
+GPIO5.associatedPins[1].pin.$assign = "PB20";
+GPIO5.associatedPins[2].$name       = "PIN_2";
+GPIO5.associatedPins[2].pin.$assign = "PB13";
 
 I2C1.$name                             = "I2C_OLED";
 I2C1.basicEnableController             = true;
@@ -149,14 +153,14 @@ I2C1.basicControllerStandardBusSpeed   = "Fast";
 I2C1.peripheral.$assign                = "I2C1";
 I2C1.peripheral.sdaPin.$assign         = "PB3";
 I2C1.peripheral.sclPin.$assign         = "PB2";
-I2C1.sdaPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric0";
 I2C1.sdaPinConfig.hideOutputInversion  = scripting.forceWrite(false);
 I2C1.sdaPinConfig.onlyInternalResistor = scripting.forceWrite(false);
 I2C1.sdaPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
-I2C1.sclPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric1";
+I2C1.sdaPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric0";
 I2C1.sclPinConfig.hideOutputInversion  = scripting.forceWrite(false);
 I2C1.sclPinConfig.onlyInternalResistor = scripting.forceWrite(false);
 I2C1.sclPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
+I2C1.sclPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric1";
 
 PWM1.$name                      = "PWM_0";
 PWM1.timerCount                 = 800;
@@ -185,8 +189,8 @@ TIMER1.peripheral.$assign = "TIMG0";
  * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
  * re-solve from scratch.
  */
-ADC121.peripheral.$suggestSolution           = "ADC0";
-ADC121.peripheral.adcPin0.$suggestSolution   = "PA27";
+ADC121.peripheral.$suggestSolution           = "ADC1";
+ADC121.peripheral.adcPin0.$suggestSolution   = "PA15";
 Board.peripheral.$suggestSolution            = "DEBUGSS";
 Board.peripheral.swclkPin.$suggestSolution   = "PA20";
 Board.peripheral.swdioPin.$suggestSolution   = "PA19";
@@ -208,6 +212,3 @@ GPIO4.associatedPins[4].pin.$suggestSolution = "PA22";
 GPIO4.associatedPins[5].pin.$suggestSolution = "PA8";
 GPIO4.associatedPins[6].pin.$suggestSolution = "PB19";
 GPIO4.associatedPins[7].pin.$suggestSolution = "PA25";
-GPIO5.associatedPins[0].pin.$suggestSolution = "PB20";
-GPIO5.associatedPins[1].pin.$suggestSolution = "PB14";
-GPIO5.associatedPins[2].pin.$suggestSolution = "PB13";
