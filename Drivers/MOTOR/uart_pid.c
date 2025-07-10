@@ -30,6 +30,6 @@ return count;
 void Serial_PID(void){
     
 
-	printf("%.2f,%.2f\n", g_motorA.target, g_motorA.now);
+	printf("%.2f,%.2f\n", g_motorB.target, g_motorB.now);
 	
 }
