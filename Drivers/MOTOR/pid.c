@@ -4,6 +4,7 @@
 
 #define motor_max_duty 50000
 #define MAX_DUTY 50000
+#define Middle_Speed 30
 
 Pid_t g_motorA;
 Pid_t g_motorB;
@@ -67,7 +68,7 @@ void motor_target_set(int spe1, int spe2)
 void angle_sudu(float target)
 {
     g_angle.target = target;
-    g_angle.now = Yaw; // 当前的偏航角作为反馈
+    g_angle.now = wit_data.yaw; // 当前的偏航角作为反馈
     pid_cal(&g_angle);
     // 对PID输出进行限幅，防止转向过快
     if (g_angle.out >= 40)
@@ -77,7 +78,7 @@ void angle_sudu(float target)
 
     // 将角度环的输出作为速度差，叠加到基础速度上
     // 例如，车要左转，angle.out为负，则左轮减速，右轮加速
-    motor_target_set(260 - g_angle.out, 260 + g_angle.out);
+    motor_target_set(Middle_Speed - g_angle.out, Middle_Speed + g_angle.out);
 }
 
 /**

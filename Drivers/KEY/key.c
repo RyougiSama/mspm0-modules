@@ -149,9 +149,12 @@ void Key_PID_MDF()
             case 1:
                 motor_status = 1;
                 Motor_On();
+                // pid_init(&g_motorA, DELTA_PID, 2.05, 17.45, 0);
+                // pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
                 pid_init(&g_motorA, DELTA_PID, 2.05, 17.45, 0);
                 pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
-                motor_target_set(100, 100);
+                pid_init(&g_angle,POSITION_PID,2,0,0.57);
+                angle_cal(30);
                 motor_start = tick_ms;
                 break;
             case 16:
