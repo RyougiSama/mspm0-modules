@@ -3,7 +3,7 @@
 #include "uart_pid.h"
 
 #define MAX_DUTY 50000
-#define Middle_Speed 30
+#define Middle_Speed 10
 
 Pid_t g_motorA;
 Pid_t g_motorB;
@@ -70,10 +70,10 @@ void angle_sudu(float target)
     g_angle.now = wit_data.yaw; // 当前的偏航角作为反馈
     pid_cal(&g_angle);
     // 对PID输出进行限幅，防止转向过快
-    if (g_angle.out >= 40)
-        g_angle.out = 40;
-    if (g_angle.out <= -40)
-        g_angle.out = -40;
+    if (g_angle.out >= 3)
+        g_angle.out = 3;
+    if (g_angle.out <= -3)
+        g_angle.out = -3;
 
     // 将角度环的输出作为速度差，叠加到基础速度上
     // 例如，车要左转，angle.out为负，则左轮减速，右轮加速
@@ -88,12 +88,12 @@ void angle_sudu(float target)
 void angle_cal(float target)
 {
     g_angle.target = target;
-    g_angle.now = Yaw;
+    g_angle.now = wit_data.yaw;
     pid_cal(&g_angle);
-    if (g_angle.out >= 100)
-        g_angle.out = 100;
-    if (g_angle.out <= -100)
-        g_angle.out = -100;
+    if (g_angle.out >= 5)
+        g_angle.out = 5;
+    if (g_angle.out <= -5)
+        g_angle.out = -5;
 
     // 将角度环的输出直接作为两轮的速度目标值（方向相反），实现原地转向
     motor_target_set(-g_angle.out, g_angle.out);

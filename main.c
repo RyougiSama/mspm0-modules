@@ -109,18 +109,26 @@ int main(void)
 
     while (1)
     {
-        Oled_Ganv_Test();
+        // Oled_Ganv_Test();
         Key_PID_MDF();
         Gray_Sensor_Test();
-        // OLED_Task();
-        // if (motor_status)
-        // {
-        //     if (tick_ms - motor_start >= 5000)
-        //     {
-        //         motor_status = 0;
-        //         Motor_Stop();
-        //     }
-        // }
+        OLED_Task();
+        if(key_mode == 0)
+        {
+            if(motor_status)
+            {
+                angle_cal(132);
+            }
+            
+        }
+        if (motor_status)
+        {
+            if (tick_ms - motor_start >= 5000)
+            {
+                motor_status = 0;
+                Motor_Stop();
+            }
+        }
     }
 }
 
@@ -133,27 +141,29 @@ void OLED_Task(void)
         OLED_Clear();
         if(key_mode == 0)
         {
-            OLED_ShowString(4, 0, (uint8_t *)"En1:", 16);
-            OLED_ShowNum(40, 0, (uint32_t)g_motorA.now, 3, 16);
-            OLED_ShowString(4, 2, (uint8_t *)"En2:", 16);
-            OLED_ShowNum(40, 2, (uint32_t)g_motorB.now, 3, 16);
+            sprintf((char *)oled_buffer, "En1:%-4.1f", g_motorA.now);
+            OLED_ShowString(4, 0, (uint8_t *)oled_buffer, 16);
+            
+            sprintf((char *)oled_buffer, "En2:%-4.1f", g_motorB.now);
+            OLED_ShowString(4, 2, (uint8_t *)oled_buffer, 16);
+
             sprintf((char *)oled_buffer, "YAW:%-6.2f", wit_data.yaw);
             OLED_ShowString(0, 4, (uint8_t *)oled_buffer, 16);
 
         }
         else if (key_mode == 1)
         {
-            OLED_ShowString(4, 0, (uint8_t *)"En1:", 16);
-
-            OLED_ShowNum(40, 0, (uint32_t)g_motorA.now, 3, 16);
+            sprintf((char *)oled_buffer, "En1:%-4.1f", g_motorA.now);
+            OLED_ShowString(4, 0, (uint8_t *)oled_buffer, 16);
+            
 
             // --- 显示P值 ---
             sprintf((char *)oled_buffer, "AP:%-4.2f", g_motorA.p);
-            OLED_ShowString(0, 4, (uint8_t *)oled_buffer, 16);
+            OLED_ShowString(0, 2, (uint8_t *)oled_buffer, 16);
 
             // --- 显示I值 ---
             sprintf((char *)oled_buffer, "AI:%-4.2f", g_motorA.i);
-            OLED_ShowString(65, 4, (uint8_t *)oled_buffer, 16);
+            OLED_ShowString(0, 4, (uint8_t *)oled_buffer, 16);
 
             // --- 显示D值 ---
             sprintf((char *)oled_buffer, "AD:%-4.2f", g_motorA.d);
@@ -161,16 +171,15 @@ void OLED_Task(void)
         }
         else if (key_mode == 2)
         {
-            OLED_ShowString(4, 0, (uint8_t *)"En2:", 16);
-            OLED_ShowNum(40, 0, (uint32_t)g_motorB.now, 3, 16);
-
+            sprintf((char *)oled_buffer, "En2:%-4.1f", g_motorB.now);
+            OLED_ShowString(4, 0, (uint8_t *)oled_buffer, 16);
             // --- 显示P值 ---
-            sprintf((char *)oled_buffer, "BP:%-4.2f", g_motorB.p);
-            OLED_ShowString(0, 4, (uint8_t *)oled_buffer, 16);
+            sprintf((char *)oled_buffer,                                                               "BP:%-4.2f", g_motorB.p);
+            OLED_ShowString(0, 2, (uint8_t *)oled_buffer, 16);
 
             // --- 显示I值 ---
             sprintf((char *)oled_buffer, "BI:%-4.2f", g_motorB.i);
-            OLED_ShowString(65, 4, (uint8_t *)oled_buffer, 16);
+            OLED_ShowString(0, 4, (uint8_t *)oled_buffer, 16);
 
             // --- 显示D值 ---
             sprintf((char *)oled_buffer, "BD:%-4.2f", g_motorB.d);

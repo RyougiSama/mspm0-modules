@@ -64,25 +64,25 @@ void Gray_Sensor_Test(void)
             break;
         case 0b11101111:
         case 0b11001111:
-            motor_target_set(10, 8);
+            motor_target_set(11, 9);
             break;
         case 0b11110111:
         case 0b11110011:
-            motor_target_set(8, 10);
+            motor_target_set(9, 11);
             break;
         case 0b10111111:
         case 0b00111111:
-            motor_target_set(10, 5);
+            motor_target_set(13, 7);
             break;
         case 0b11111001:
         case 0b11111100:
-            motor_target_set(5, 10);
+            motor_target_set(7, 13);
             break;
         case 0b11111110:
-            motor_target_set(2, 10);
+            motor_target_set(5, 15);
             break;
         case 0b01111111:
-            motor_target_set(10, 2);
+            motor_target_set(15, 5);
             break;
         default:
             break;
