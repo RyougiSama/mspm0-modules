@@ -132,6 +132,7 @@ uint8_t Matrix_Key_Scan(void)
 }
 
 extern uint8_t key_mode;
+extern bool start_gray_sensor_task;
 
 void Key_PID_MDF()
 {
@@ -153,6 +154,15 @@ void Key_PID_MDF()
                 pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
                 motor_target_set(100, 100);
                 motor_start = tick_ms;
+                break;
+            case 2:
+                start_gray_sensor_task = true;
+                Motor_On();
+                pid_init(&g_motorA, DELTA_PID, 2.05, 17.45, 0);
+                pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
+                break;
+            case 3:
+                Motor_Stop();
                 break;
             case 16:
                 key_mode = 1;

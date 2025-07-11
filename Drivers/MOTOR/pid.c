@@ -2,7 +2,6 @@
 #include "pid.h"
 #include "uart_pid.h"
 
-#define motor_max_duty 50000
 #define MAX_DUTY 50000
 
 Pid_t g_motorA;
