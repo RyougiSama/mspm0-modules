@@ -158,8 +158,8 @@ void Key_PID_MDF()
             case 2:
                 start_gray_sensor_task = true;
                 Motor_On();
-                pid_init(&g_motorA, DELTA_PID, 2.05, 17.45, 0);
-                pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
+                pid_init(&g_motorA, DELTA_PID, 2.05, 40, 0);
+                pid_init(&g_motorB, DELTA_PID, 2.10, 40, 0);
                 break;
             case 3:
                 Motor_Stop();

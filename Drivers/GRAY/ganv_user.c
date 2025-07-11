@@ -60,29 +60,29 @@ void Gray_Sensor_Test(void)
 
     switch (g_digital_value) {
         case 0b11100111:
-            motor_target_set(20, 20);
+            motor_target_set(10, 10);
             break;
         case 0b11101111:
         case 0b11001111:
-            motor_target_set(20, 15);
+            motor_target_set(10, 8);
             break;
         case 0b11110111:
         case 0b11110011:
-            motor_target_set(15, 20);
+            motor_target_set(8, 10);
             break;
         case 0b10111111:
         case 0b00111111:
-            motor_target_set(20, 10);
+            motor_target_set(10, 5);
             break;
         case 0b11111001:
         case 0b11111100:
-            motor_target_set(10, 20);
+            motor_target_set(5, 10);
             break;
         case 0b11111110:
-            motor_target_set(5, 20);
+            motor_target_set(2, 10);
             break;
         case 0b01111111:
-            motor_target_set(20, 5);
+            motor_target_set(10, 2);
             break;
         default:
             break;
