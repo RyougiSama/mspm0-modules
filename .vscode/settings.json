@@ -8,6 +8,8 @@
         "msp.h": "c",
         "stdint.h": "c",
         "clock.h": "c",
-        "cstdint": "c"
+        "cstdint": "c",
+        "ganv_user.h": "c",
+        "stdbool.h": "c"
     }
 }
