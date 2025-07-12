@@ -279,6 +279,69 @@ void Key_PID_MDF()
                 pid_init(&g_motorB, DELTA_PID, g_motorB.p, g_motorB.i, g_motorB.d);
                 break;
             case 16:
+                key_mode = 3;
+                break;
+            default:
+                break;
+            }
+        }
+        else if (key_mode == 3) { // 进入angel调参模式
+            switch (key_val) {
+            case 1:
+                g_angle.p += 0.5;
+                break;
+            case 2:
+                g_angle.p += 0.01;
+                break;
+            case 3:
+                g_angle.p -= 0.5;
+                break;
+            case 4:
+                g_angle.p -= 0.01;
+                break;
+            case 5:
+                g_angle.i += 0.5;
+                break;
+            case 6:
+                g_angle.i += 0.01;
+                break;
+            case 7:
+                g_angle.i -= 0.5;
+                break;
+            case 8:
+                g_angle.i -= 0.01;
+                break;
+            case 9:
+                g_angle.d += 0.5;
+                break;
+            case 10:
+                g_angle.d += 0.01;
+                break;
+            case 11:
+                g_angle.d -= 0.5;
+                break;
+            case 12:
+                g_angle.d -= 0.01;
+                break;
+           case 13:
+                motor_status = 1;
+                Motor_On();
+                // pid_init(&g_motorA, DELTA_PID, 2.05, 17.45, 0);
+                // pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
+                pid_init(&g_motorA, DELTA_PID, 3.5, 14, 0);
+                pid_init(&g_motorB, DELTA_PID, 3.5, 14, 0);
+                pid_init(&g_angle,POSITION_PID,0.5,0,0);
+                
+                motor_start = tick_ms;
+                break;
+            case 14:
+                Motor_Stop();
+                motor_status = 0;         
+                break;
+            case 15:
+                
+                break;
+            case 16:
                 key_mode = 0;
                 break;
             default:
