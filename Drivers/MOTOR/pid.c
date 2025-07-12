@@ -67,7 +67,7 @@ void motor_target_set(int spe1, int spe2)
 void angle_sudu(float target)
 {
     g_angle.target = target;
-    g_angle.now = wit_data.yaw; // 当前的偏航角作为反馈
+    g_angle.now = Yaw; // 当前的偏航角作为反馈
     pid_cal(&g_angle);
     // 对PID输出进行限幅，防止转向过快
     if (g_angle.out >= 3)
@@ -88,7 +88,7 @@ void angle_sudu(float target)
 void angle_cal(float target)
 {
     g_angle.target = target;
-    g_angle.now = wit_data.yaw;
+    g_angle.now = Yaw;
     pid_cal(&g_angle);
     if (g_angle.out >= 5)
         g_angle.out = 5;

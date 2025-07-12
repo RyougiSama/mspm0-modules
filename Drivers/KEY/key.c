@@ -213,7 +213,7 @@ void Key_PID_MDF()
                 break;
             case 13:
                 // start_gray_sensor_task = true;
-                motor_target_set(100, 0);
+                motor_target_set(50, 0);
                 Motor_On();
                 // pid_init(&g_motorA, DELTA_PID, 2.05, 17.45, 0);
                 pid_init(&g_motorA, DELTA_PID, 3.5, 14, 0);
@@ -330,7 +330,8 @@ void Key_PID_MDF()
                 // pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
                 pid_init(&g_motorA, DELTA_PID, 3.5, 14, 0);
                 pid_init(&g_motorB, DELTA_PID, 3.5, 14, 0);
-                pid_init(&g_angle,POSITION_PID,0.5,0,0);
+                pid_init(&g_angle,POSITION_PID,2,0,0.57);
+                angle_cal(150);
                 
                 motor_start = tick_ms;
                 break;
@@ -339,7 +340,7 @@ void Key_PID_MDF()
                 motor_status = 0;         
                 break;
             case 15:
-                
+                pid_init(&g_angle,POSITION_PID,g_angle.p,g_angle.i,g_angle.d);
                 break;
             case 16:
                 key_mode = 0;

@@ -117,14 +117,14 @@ int main(void)
         Gray_Sensor_Test();
         OLED_Task();
         Wit_Proc();
-        // if(key_mode == 3)
-        // {
-        //     if(motor_status)
-        //     {
-        //         angle_cal(150);
-        //     }
+        if(key_mode == 3)
+        {
+            if(motor_status)
+            {
+                angle_cal(150);
+            }
             
-        // }
+        }
         // if (motor_status)
         // {
         //     if (tick_ms - motor_start >= 5000)
@@ -191,7 +191,7 @@ void OLED_Task(void)
         }
         else if (key_mode == 3)
         {
-            sprintf((char *)oled_buffer, "YAW:%-6.2f", wit_data.yaw);
+            sprintf((char *)oled_buffer, "YAW:%-6.2f", Yaw);
             OLED_ShowString(4, 0, (uint8_t *)oled_buffer, 16);
             // --- 显示P值 ---
             sprintf((char *)oled_buffer, "P:%-4.2f", g_angle.p);
