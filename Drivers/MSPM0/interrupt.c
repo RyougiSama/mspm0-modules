@@ -12,7 +12,7 @@ volatile uint8_t receivedData[9];
 uint8_t dataIndex = 0;
 // 使用volatile关键字，防止编译器过度优化
 volatile bool g_isGyroDataReady = false; 
-uint8_t g_rawGyroData[9]; // 用于存放从中断中接收的原始数据
+volatile uint8_t g_rawGyroData[9]; // 用于存放从中断中接收的原始数据
 
 void SysTick_Handler(void)
 {
@@ -243,5 +243,15 @@ void TIMER_speedget_INST_IRQHandler(void)       //编码器速度获取
             break;
         default:
             break;
+    }
+}
+
+
+void HardFault_Handler(void)
+{
+    // 在这里让一个LED灯快速闪烁
+    while(1)
+    {
+        DL_GPIO_togglePins(GPIOA, GPIO_LED_PIN_LED_PIN);
     }
 }

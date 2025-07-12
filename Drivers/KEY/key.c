@@ -213,10 +213,10 @@ void Key_PID_MDF()
                 break;
             case 13:
                 // start_gray_sensor_task = true;
-                motor_target_set(0, 50);
+                motor_target_set(100, 0);
                 Motor_On();
                 // pid_init(&g_motorA, DELTA_PID, 2.05, 17.45, 0);
-                pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
+                pid_init(&g_motorA, DELTA_PID, 3.5, 14, 0);
                 break;
             case 14:
                 Motor_Stop();
@@ -270,7 +270,7 @@ void Key_PID_MDF()
                 motor_target_set(0, 50);
                 Motor_On();
                 // pid_init(&g_motorA, DELTA_PID, 2.05, 17.45, 0);
-                pid_init(&g_motorB, DELTA_PID, 0, 5, 0);
+                pid_init(&g_motorB, DELTA_PID, 3.5, 14, 0);
                 break;
             case 14:
                 Motor_Stop();

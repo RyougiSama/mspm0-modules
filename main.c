@@ -117,14 +117,14 @@ int main(void)
         Gray_Sensor_Test();
         OLED_Task();
         Wit_Proc();
-        if(key_mode == 3)
-        {
-            if(motor_status)
-            {
-                angle_cal(0);
-            }
+        // if(key_mode == 3)
+        // {
+        //     if(motor_status)
+        //     {
+        //         angle_cal(150);
+        //     }
             
-        }
+        // }
         // if (motor_status)
         // {
         //     if (tick_ms - motor_start >= 5000)
@@ -214,14 +214,14 @@ void Wit_Proc(void)
         {
             // 在处理数据前，先清除标志位
             g_isGyroDataReady = false;
-            RollL = receivedData[0];
-            RollH = receivedData[1];
-            PitchL = receivedData[2];
-            PitchH = receivedData[3];
-            YawL = receivedData[4];
-            YawH = receivedData[5];
-            VL = receivedData[6];
-            VH = receivedData[7];
+            RollL = g_rawGyroData[0];
+            RollH = g_rawGyroData[1];
+            PitchL = g_rawGyroData[2];
+            PitchH = g_rawGyroData[3];
+            YawL = g_rawGyroData[4];
+            YawH = g_rawGyroData[5];
+            VL = g_rawGyroData[6];
+            VH = g_rawGyroData[7];
 
 
             if((float)(((uint16_t)RollH << 8) | RollL)/32768*180>180){

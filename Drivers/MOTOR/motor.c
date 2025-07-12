@@ -33,7 +33,7 @@ void Motor_Stop(void)
 
 static void Set_Duty(float duty, uint8_t channel)
 {
-    uint32_t CompareValue = (PWM_PERIOD_CNT - 1) - (PWM_PERIOD_CNT - 1) * duty / PWM_MAX_DUTY;
+    uint32_t CompareValue = (PWM_PERIOD_CNT - 1) - (PWM_PERIOD_CNT - 1) * duty / PWM_MAX_DUTY;        
     if(channel==0)
     {
         DL_TimerG_setCaptureCompareValue(PWM_0_INST,CompareValue,DL_TIMER_CC_0_INDEX);
