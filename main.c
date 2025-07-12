@@ -35,6 +35,7 @@
 #include "stdio.h"
 #include "ganv_user.h"
 #include "ADC.h"
+#include "stdbool.h"
 
 uint32_t motor_ms, oled_ms;
 uint16_t test_duty = 10000;
@@ -88,13 +89,15 @@ int main(void)
     SysTick_Init();
     NVIC_EnableIRQ(TIMER_speedget_INST_INT_IRQN);
     DL_TimerA_startCounter(TIMER_speedget_INST);
+    NVIC_EnableIRQ(UART_WIT_INST_INT_IRQN);
 
     // peripheral initialization
     OLED_Init();
     Motor_Init();
     Encoder_Init();
     Adc_Init();
-    WIT_Init();
+    // WIT_Init();
+    // Serial_JY61P_Zero_Yaw();
     No_MCU_Ganv_Sensor_Init_Frist(&g_ganv_sensor);
     No_MCU_Ganv_Sensor_Init(&g_ganv_sensor, g_calibrated_white, g_calibrated_black);
 
@@ -113,6 +116,7 @@ int main(void)
         Key_PID_MDF();
         Gray_Sensor_Test();
         OLED_Task();
+        Wit_Proc();
         if(key_mode == 3)
         {
             if(motor_status)
@@ -147,7 +151,7 @@ void OLED_Task(void)
             sprintf((char *)oled_buffer, "En2:%-4.1f", g_motorB.now);
             OLED_ShowString(4, 2, (uint8_t *)oled_buffer, 16);
 
-            sprintf((char *)oled_buffer, "YAW:%-6.2f", wit_data.yaw);
+            sprintf((char *)oled_buffer, "YAW:%-6.2f", Yaw);
             OLED_ShowString(0, 4, (uint8_t *)oled_buffer, 16);
 
         }
@@ -202,4 +206,40 @@ void OLED_Task(void)
             OLED_ShowString(0, 6, (uint8_t *)oled_buffer, 16);
         }
     }
+}
+
+void Wit_Proc(void)
+{
+    if (g_isGyroDataReady)
+        {
+            // 在处理数据前，先清除标志位
+            g_isGyroDataReady = false;
+            RollL = receivedData[0];
+            RollH = receivedData[1];
+            PitchL = receivedData[2];
+            PitchH = receivedData[3];
+            YawL = receivedData[4];
+            YawH = receivedData[5];
+            VL = receivedData[6];
+            VH = receivedData[7];
+
+
+            if((float)(((uint16_t)RollH << 8) | RollL)/32768*180>180){
+                    Roll = (float)(((uint16_t)RollH << 8) | RollL)/32768*180 - 360;
+                }else{
+                    Roll = (float)(((uint16_t)RollH << 8) | RollL)/32768*180;
+                }
+
+                if((float)(((uint16_t)PitchH << 8) | PitchL)/32768*180>180){
+                    Pitch = (float)(((uint16_t)PitchH << 8) | PitchL)/32768*180 - 360;
+                }else{
+                    Pitch = (float)(((uint16_t)PitchH << 8) | PitchL)/32768*180;
+                }
+
+                if((float)(((uint16_t)YawH << 8) | YawL)/32768*180 >180){
+                    Yaw = (float)(((uint16_t)YawH << 8) | YawL)/32768*180 - 360;
+                }else{
+                    Yaw = (float)(((uint16_t)YawH << 8) | YawL)/32768*180;
+                }
+        }
 }

@@ -8,6 +8,8 @@
 #include "motor.h"
 #include "pid.h"
 #include "key.h"
+#include "interrupt.h"
 
 void OLED_Task(void);
+void Wit_Proc(void);
 #endif  /* #ifndef _MAIN_H_ */

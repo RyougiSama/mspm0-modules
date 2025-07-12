@@ -36,6 +36,7 @@ typedef struct {
 
 extern WIT_Data_t wit_data;
 
-void WIT_Init(void);
+// void WIT_Init(void);
+void Serial_JY61P_Zero_Yaw(void);
 
 #endif /* #ifndef __WIT_H */
