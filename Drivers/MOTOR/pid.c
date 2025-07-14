@@ -88,7 +88,11 @@ void angle_sudu(float target)
 void angle_cal(float target)
 {
     g_angle.target = target;
-    g_angle.now = wit_data.yaw;
+    static float yaw_filtered = 0.0f;
+    float filter_coeff = 0.2; // 值越小，滤波越强（但延迟越大）
+    yaw_filtered = (1 - filter_coeff) * yaw_filtered + filter_coeff * wit_data.yaw;
+    g_angle.now = yaw_filtered; // 使用滤波后的值作为PID输入
+    // g_angle.now = wit_data.yaw;
     pid_cal(&g_angle);
     if (g_angle.out >= 3)
         g_angle.out = 3;

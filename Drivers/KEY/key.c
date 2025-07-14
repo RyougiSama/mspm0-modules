@@ -340,6 +340,8 @@ void Key_PID_MDF()
                 motor_status = 0;         
                 break;
             case 15:
+                motor_status = 1;
+                Motor_On();
                 pid_init(&g_angle,POSITION_PID,g_angle.p,g_angle.i,g_angle.d);
                 break;
             case 16:
