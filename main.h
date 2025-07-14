@@ -11,5 +11,5 @@
 #include "interrupt.h"
 
 void OLED_Task(void);
-void Wit_Proc(void);
+// void Wit_Proc(void);
 #endif  /* #ifndef _MAIN_H_ */
