@@ -330,7 +330,7 @@ void Key_PID_MDF()
                 // pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
                 pid_init(&g_motorA, DELTA_PID, 3.5, 14, 0);
                 pid_init(&g_motorB, DELTA_PID, 3.5, 14, 0);
-                pid_init(&g_angle,POSITION_PID,2,0,0.57);
+                pid_init(&g_angle,POSITION_PID,0.5,0,0);
                 angle_cal(150);
                 
                 motor_start = tick_ms;

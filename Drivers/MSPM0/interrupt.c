@@ -147,90 +147,90 @@ void UART_WIT_INST_IRQHandler(void)
 // Get encoder count
 void GROUP1_IRQHandler(void)
 {
-    // uint32_t gpioB = DL_GPIO_getEnabledInterruptStatus(GPIO_Encoder_PIN_Right_E2A_PORT,GPIO_Encoder_PIN_Right_E2A_PIN); //预留四驱接口
-    // uint32_t gpioA = DL_GPIO_getEnabledInterruptStatus(GPIO_Encoder_PIN_Left_E1A_PORT,GPIO_Encoder_PIN_Left_E1A_PIN);
+    uint32_t gpioB = DL_GPIO_getEnabledInterruptStatus(GPIO_Encoder_PIN_Right_E2A_PORT,GPIO_Encoder_PIN_Right_E2A_PIN); //预留四驱接口
+    uint32_t gpioA = DL_GPIO_getEnabledInterruptStatus(GPIO_Encoder_PIN_Left_E1A_PORT,GPIO_Encoder_PIN_Left_E1A_PIN);
 
-    // if((gpioB & GPIO_Encoder_PIN_Right_E2A_PIN))
-    // {   
-    //     if(DL_GPIO_readPins(GPIO_Encoder_PIN_Right_E2B_PORT,GPIO_Encoder_PIN_Right_E2B_PIN))
-    //         g_encoder_B++;
-    //     else 
-    //         g_encoder_B--;
-    //     DL_GPIO_clearInterruptStatus(GPIO_Encoder_PIN_Right_E2A_PORT, GPIO_Encoder_PIN_Right_E2A_PIN);
-    // }
-    // if((gpioA & GPIO_Encoder_PIN_Left_E1A_PIN))
-    // {
-    //     // DL_GPIO_togglePins(GPIOA, GPIO_LED_PIN_LED_PIN);
-    //     if(DL_GPIO_readPins(GPIO_Encoder_PIN_Left_E1B_PORT,GPIO_Encoder_PIN_Left_E1B_PIN))
-    //         g_encoder_A--;
-    //     else 
-    //         g_encoder_A++;
-    //     DL_GPIO_clearInterruptStatus(GPIO_Encoder_PIN_Left_E1A_PORT, GPIO_Encoder_PIN_Left_E1A_PIN);
-    // }
-
-
-    // 获取A、B两相的中断状态
-    uint32_t gpioA_left  = DL_GPIO_getEnabledInterruptStatus(GPIO_Encoder_PIN_Left_E1A_PORT, GPIO_Encoder_PIN_Left_E1A_PIN);
-    uint32_t gpioB_left  = DL_GPIO_getEnabledInterruptStatus(GPIO_Encoder_PIN_Left_E1B_PORT, GPIO_Encoder_PIN_Left_E1B_PIN);
-    uint32_t gpioA_right = DL_GPIO_getEnabledInterruptStatus(GPIO_Encoder_PIN_Right_E2A_PORT, GPIO_Encoder_PIN_Right_E2A_PIN);
-    uint32_t gpioB_right = DL_GPIO_getEnabledInterruptStatus(GPIO_Encoder_PIN_Right_E2B_PORT, GPIO_Encoder_PIN_Right_E2B_PIN);
-
-    // --- 处理左侧编码器 ---
-    // 注意：如果电机实际转动方向与计数方向相反，只需将下面的 g_encoder_A++ 和 g_encoder_A-- 对调即可。
-    
-    // A相引脚触发了中断
-    if (gpioA_left & GPIO_Encoder_PIN_Left_E1A_PIN)
-    {
-        // 通过读取B相电平来判断方向
-        if (DL_GPIO_readPins(GPIO_Encoder_PIN_Left_E1B_PORT, GPIO_Encoder_PIN_Left_E1B_PIN) != 
-            DL_GPIO_readPins(GPIO_Encoder_PIN_Left_E1A_PORT, GPIO_Encoder_PIN_Left_E1A_PIN)) {
-            g_encoder_A--; // 正转
-        } else {
-            g_encoder_A++; // 反转
-        }
-        DL_GPIO_clearInterruptStatus(GPIO_Encoder_PIN_Left_E1A_PORT, GPIO_Encoder_PIN_Left_E1A_PIN);
-    }
-    
-    // B相引脚触发了中断
-    if (gpioB_left & GPIO_Encoder_PIN_Left_E1B_PIN)
-    {
-        // 通过读取A相电平来判断方向
-        if (DL_GPIO_readPins(GPIO_Encoder_PIN_Left_E1A_PORT, GPIO_Encoder_PIN_Left_E1A_PIN) == 
-            DL_GPIO_readPins(GPIO_Encoder_PIN_Left_E1B_PORT, GPIO_Encoder_PIN_Left_E1B_PIN)) {
-            g_encoder_A--; // 正转
-        } else {
-            g_encoder_A++; // 反转
-        }
-        DL_GPIO_clearInterruptStatus(GPIO_Encoder_PIN_Left_E1B_PORT, GPIO_Encoder_PIN_Left_E1B_PIN);
-    }
-
-
-    // --- 处理右侧编码器 ---
-    // 注意：如果电机实际转动方向与计数方向相反，只需将下面的 g_encoder_B++ 和 g_encoder_B-- 对调即可。
-
-    // A相引脚触发了中断
-    if (gpioA_right & GPIO_Encoder_PIN_Right_E2A_PIN)
-    {
-        if (DL_GPIO_readPins(GPIO_Encoder_PIN_Right_E2B_PORT, GPIO_Encoder_PIN_Right_E2B_PIN) == 
-            DL_GPIO_readPins(GPIO_Encoder_PIN_Right_E2A_PORT, GPIO_Encoder_PIN_Right_E2A_PIN)) {
-            g_encoder_B--; // 正转
-        } else {
-            g_encoder_B++; // 反转
-        }
+    if((gpioB & GPIO_Encoder_PIN_Right_E2A_PIN))
+    {   
+        if(DL_GPIO_readPins(GPIO_Encoder_PIN_Right_E2B_PORT,GPIO_Encoder_PIN_Right_E2B_PIN))
+            g_encoder_B++;
+        else 
+            g_encoder_B--;
         DL_GPIO_clearInterruptStatus(GPIO_Encoder_PIN_Right_E2A_PORT, GPIO_Encoder_PIN_Right_E2A_PIN);
     }
-    
-    // B相引脚触发了中断
-    if (gpioB_right & GPIO_Encoder_PIN_Right_E2B_PIN)
+    if((gpioA & GPIO_Encoder_PIN_Left_E1A_PIN))
     {
-        if (DL_GPIO_readPins(GPIO_Encoder_PIN_Right_E2A_PORT, GPIO_Encoder_PIN_Right_E2A_PIN) != 
-            DL_GPIO_readPins(GPIO_Encoder_PIN_Right_E2B_PORT, GPIO_Encoder_PIN_Right_E2B_PIN)) {
-            g_encoder_B--; // 正转
-        } else {
-            g_encoder_B++; // 反转
-        }
-        DL_GPIO_clearInterruptStatus(GPIO_Encoder_PIN_Right_E2B_PORT, GPIO_Encoder_PIN_Right_E2B_PIN);
+        // DL_GPIO_togglePins(GPIOA, GPIO_LED_PIN_LED_PIN);
+        if(DL_GPIO_readPins(GPIO_Encoder_PIN_Left_E1B_PORT,GPIO_Encoder_PIN_Left_E1B_PIN))
+            g_encoder_A--;
+        else 
+            g_encoder_A++;
+        DL_GPIO_clearInterruptStatus(GPIO_Encoder_PIN_Left_E1A_PORT, GPIO_Encoder_PIN_Left_E1A_PIN);
     }
+
+
+    // // 获取A、B两相的中断状态
+    // uint32_t gpioA_left  = DL_GPIO_getEnabledInterruptStatus(GPIO_Encoder_PIN_Left_E1A_PORT, GPIO_Encoder_PIN_Left_E1A_PIN);
+    // uint32_t gpioB_left  = DL_GPIO_getEnabledInterruptStatus(GPIO_Encoder_PIN_Left_E1B_PORT, GPIO_Encoder_PIN_Left_E1B_PIN);
+    // uint32_t gpioA_right = DL_GPIO_getEnabledInterruptStatus(GPIO_Encoder_PIN_Right_E2A_PORT, GPIO_Encoder_PIN_Right_E2A_PIN);
+    // uint32_t gpioB_right = DL_GPIO_getEnabledInterruptStatus(GPIO_Encoder_PIN_Right_E2B_PORT, GPIO_Encoder_PIN_Right_E2B_PIN);
+
+    // // --- 处理左侧编码器 ---
+    // // 注意：如果电机实际转动方向与计数方向相反，只需将下面的 g_encoder_A++ 和 g_encoder_A-- 对调即可。
+    
+    // // A相引脚触发了中断
+    // if (gpioA_left & GPIO_Encoder_PIN_Left_E1A_PIN)
+    // {
+    //     // 通过读取B相电平来判断方向
+    //     if (DL_GPIO_readPins(GPIO_Encoder_PIN_Left_E1B_PORT, GPIO_Encoder_PIN_Left_E1B_PIN) != 
+    //         DL_GPIO_readPins(GPIO_Encoder_PIN_Left_E1A_PORT, GPIO_Encoder_PIN_Left_E1A_PIN)) {
+    //         g_encoder_A--; // 正转
+    //     } else {
+    //         g_encoder_A++; // 反转
+    //     }
+    //     DL_GPIO_clearInterruptStatus(GPIO_Encoder_PIN_Left_E1A_PORT, GPIO_Encoder_PIN_Left_E1A_PIN);
+    // }
+    
+    // // B相引脚触发了中断
+    // if (gpioB_left & GPIO_Encoder_PIN_Left_E1B_PIN)
+    // {
+    //     // 通过读取A相电平来判断方向
+    //     if (DL_GPIO_readPins(GPIO_Encoder_PIN_Left_E1A_PORT, GPIO_Encoder_PIN_Left_E1A_PIN) == 
+    //         DL_GPIO_readPins(GPIO_Encoder_PIN_Left_E1B_PORT, GPIO_Encoder_PIN_Left_E1B_PIN)) {
+    //         g_encoder_A--; // 正转
+    //     } else {
+    //         g_encoder_A++; // 反转
+    //     }
+    //     DL_GPIO_clearInterruptStatus(GPIO_Encoder_PIN_Left_E1B_PORT, GPIO_Encoder_PIN_Left_E1B_PIN);
+    // }
+
+
+    // // --- 处理右侧编码器 ---
+    // // 注意：如果电机实际转动方向与计数方向相反，只需将下面的 g_encoder_B++ 和 g_encoder_B-- 对调即可。
+
+    // // A相引脚触发了中断
+    // if (gpioA_right & GPIO_Encoder_PIN_Right_E2A_PIN)
+    // {
+    //     if (DL_GPIO_readPins(GPIO_Encoder_PIN_Right_E2B_PORT, GPIO_Encoder_PIN_Right_E2B_PIN) == 
+    //         DL_GPIO_readPins(GPIO_Encoder_PIN_Right_E2A_PORT, GPIO_Encoder_PIN_Right_E2A_PIN)) {
+    //         g_encoder_B--; // 正转
+    //     } else {
+    //         g_encoder_B++; // 反转
+    //     }
+    //     DL_GPIO_clearInterruptStatus(GPIO_Encoder_PIN_Right_E2A_PORT, GPIO_Encoder_PIN_Right_E2A_PIN);
+    // }
+    
+    // // B相引脚触发了中断
+    // if (gpioB_right & GPIO_Encoder_PIN_Right_E2B_PIN)
+    // {
+    //     if (DL_GPIO_readPins(GPIO_Encoder_PIN_Right_E2A_PORT, GPIO_Encoder_PIN_Right_E2A_PIN) != 
+    //         DL_GPIO_readPins(GPIO_Encoder_PIN_Right_E2B_PORT, GPIO_Encoder_PIN_Right_E2B_PIN)) {
+    //         g_encoder_B--; // 正转
+    //     } else {
+    //         g_encoder_B++; // 反转
+    //     }
+    //     DL_GPIO_clearInterruptStatus(GPIO_Encoder_PIN_Right_E2B_PORT, GPIO_Encoder_PIN_Right_E2B_PIN);
+    // }
 
 }
 
