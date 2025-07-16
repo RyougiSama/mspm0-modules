@@ -1,6 +1,6 @@
 #include "motor.h"
 
-#define PWM_MAX_DUTY (50000)
+#define PWM_MAX_DUTY (100)
 #define PWM_FREQ (1000)
 #define PWM_PERIOD_CNT (PWM_0_INST_CLK_FREQ / PWM_FREQ)
 

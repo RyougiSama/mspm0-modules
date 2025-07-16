@@ -94,6 +94,7 @@ GPIO2.associatedPins[3].$name        = "PIN_Right_E2B";
 GPIO2.associatedPins[3].direction    = "INPUT";
 GPIO2.associatedPins[3].assignedPort = "PORTB";
 GPIO2.associatedPins[3].assignedPin  = "17";
+GPIO2.associatedPins[3].polarity     = "RISE_FALL";
 
 GPIO3.$name                          = "GPIO_LED";
 GPIO3.associatedPins[0].$name        = "PIN_LED";
@@ -184,7 +185,7 @@ TIMER1.$name              = "TIMER_speedget";
 TIMER1.timerMode          = "PERIODIC";
 TIMER1.timerClkPrescale   = 100;
 TIMER1.interrupts         = ["ZERO"];
-TIMER1.timerPeriod        = "10 ms";
+TIMER1.timerPeriod        = "50 ms";
 TIMER1.peripheral.$assign = "TIMG0";
 
 UART1.$name                            = "UART_PID";
@@ -205,21 +206,22 @@ UART1.rxPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric5";
 
 UART2.$name                            = "UART_WIT";
 UART2.targetBaudRate                   = 115200;
+UART2.enableFIFO                       = true;
 UART2.rxTimeoutValue                   = 1;
 UART2.enabledInterrupts                = ["RX_TIMEOUT_ERROR"];
 UART2.enabledDMARXTriggers             = "DL_UART_DMA_INTERRUPT_RX";
-UART2.direction                        = "RX";
-UART2.enableFIFO                       = true;
+UART2.rxPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric8";
 UART2.rxPinConfig.hideOutputInversion  = scripting.forceWrite(false);
 UART2.rxPinConfig.onlyInternalResistor = scripting.forceWrite(false);
 UART2.rxPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
-UART2.rxPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric7";
 UART2.DMA_CHANNEL_RX.$name             = "DMA_WIT";
 UART2.DMA_CHANNEL_RX.addressMode       = "f2b";
 UART2.DMA_CHANNEL_RX.srcLength         = "BYTE";
 UART2.DMA_CHANNEL_RX.dstLength         = "BYTE";
 UART2.peripheral.$assign               = "UART1";
 UART2.peripheral.rxPin.$assign         = "PB5";
+UART2.peripheral.txPin.$assign         = "PB4";
+UART2.txPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric7";
 
 /**
  * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future

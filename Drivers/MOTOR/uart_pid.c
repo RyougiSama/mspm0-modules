@@ -29,5 +29,5 @@ int puts(const char *_ptr)
 
 void Serial_PID(void)
 {
-    printf("%.2f,%.2f\n", g_motorB.target, g_motorB.now);
+    printf("%.2f,%.2f,%.2f,%.2f\n", g_motorA.target, g_motorA.now,g_motorB.target, g_motorB.now);
 }

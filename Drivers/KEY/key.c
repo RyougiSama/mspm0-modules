@@ -150,19 +150,22 @@ void Key_PID_MDF()
             case 1:
                 motor_status = 1;
                 Motor_On();
-                pid_init(&g_motorA, DELTA_PID, 2.05, 17.45, 0);
-                pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
-                motor_target_set(100, 100);
+                pid_init(&g_motorA, DELTA_PID, 0, 0.19, 0);
+                pid_init(&g_motorB, DELTA_PID, 0, 0.19, 0);
+                motor_target_set(1000, 1000);
                 motor_start = tick_ms;
                 break;
             case 2:
                 start_gray_sensor_task = true;
                 Motor_On();
-                pid_init(&g_motorA, DELTA_PID, 2.05, 40, 0);
-                pid_init(&g_motorB, DELTA_PID, 2.10, 40, 0);
+                pid_init(&g_motorA, DELTA_PID, 0, 0.19, 0);
+                pid_init(&g_motorB, DELTA_PID, 0, 0.19, 0);
                 break;
             case 3:
                 Motor_Stop();
+                break;
+            case 5:
+                Gyro_Calibration_Start();
                 break;
             case 16:
                 key_mode = 1;
@@ -208,7 +211,20 @@ void Key_PID_MDF()
             case 12:
                 g_motorA.d -= 0.01;
                 break;
-            case 14:
+           case 13:
+                
+                Motor_On();
+                pid_init(&g_motorA, DELTA_PID, 0, 0.2, 0);
+                
+                
+                motor_target_set(100, 0);
+                break;    
+            case 14:    
+               
+                Motor_Stop();
+                break;
+            case 15:
+                motor_target_set(100, 0);
                 pid_init(&g_motorA, DELTA_PID, g_motorA.p, g_motorA.i, g_motorA.d);
                 break;
             case 16:
@@ -255,7 +271,20 @@ void Key_PID_MDF()
             case 12:
                 g_motorB.d -= 0.01;
                 break;
-            case 14:
+          case 13:
+                
+                Motor_On();
+                pid_init(&g_motorB, DELTA_PID, 0, 0.2, 0);
+                
+                
+                motor_target_set(0, 100);
+                break;    
+            case 14:    
+               
+                Motor_Stop();
+                break;
+            case 15:
+                motor_target_set(0, 100);
                 pid_init(&g_motorB, DELTA_PID, g_motorB.p, g_motorB.i, g_motorB.d);
                 break;
             case 16:
@@ -304,15 +333,23 @@ void Key_PID_MDF()
                 g_angle.d -= 0.01;
                 break;
             case 13:
+                motor_status = 1;
+                motor_start = tick_ms;
                 Motor_On();
-                pid_init(&g_motorA, DELTA_PID, 2.05, 17.45, 0);
-                pid_init(&g_motorB, DELTA_PID, 2.10, 17.45, 0);
-                pid_init(&g_angle, POSITION_PID, 0.3, 0.01 ,1.5);
+                pid_init(&g_motorA, DELTA_PID, 0, 0.19, 0);
+                pid_init(&g_motorB, DELTA_PID, 0, 0.19, 0);
+                pid_init(&g_angle, POSITION_PID, 0.22, 0 ,1.37);
                 break;    
             case 14:    
+                motor_status = 0;
                 Motor_Stop();
                 break;
             case 15:
+                motor_status = 1;
+                motor_start = tick_ms;
+                Motor_On();
+                pid_init(&g_motorA, DELTA_PID, 0, 0.19, 0);
+                pid_init(&g_motorB, DELTA_PID, 0, 0.19, 0);
                 pid_init(&g_angle, POSITION_PID, g_angle.p, g_angle.i, g_angle.d);
                 break;
             case 16:

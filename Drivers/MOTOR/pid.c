@@ -2,8 +2,8 @@
 #include "pid.h"
 #include "uart_pid.h"
 
-#define MAX_DUTY 50000
-#define Middle_Speed 10
+#define MAX_DUTY 100
+#define Middle_Speed 30
 
 Pid_t g_motorA;
 Pid_t g_motorB;
@@ -11,6 +11,7 @@ Pid_t g_angle;
 float Pitch, Roll, Yaw;
 uint8_t RollL, RollH, PitchL, PitchH, YawL, YawH, VL, VH, SUM;
 uint8_t ready1 = 1; // 灰度移植完删除
+ float yaw_filtered = 0.0f;
 
 void pid_reset(Pid_t *pid)
 {
@@ -67,13 +68,13 @@ void motor_target_set(int spe1, int spe2)
 void angle_sudu(float target)
 {
     g_angle.target = target;
-    g_angle.now = wit_data.yaw; // 当前的偏航角作为反馈
+    g_angle.now = wit_data.yaw; // 使用滤波后的值作为PID输入
     pid_cal(&g_angle);
     // 对PID输出进行限幅，防止转向过快
-    if (g_angle.out >= 3)
-        g_angle.out = 3;
-    if (g_angle.out <= -3)
-        g_angle.out = -3;
+    if (g_angle.out >= 100)
+        g_angle.out = 100;
+    if (g_angle.out <= -100)
+        g_angle.out = -100;
 
     // 将角度环的输出作为速度差，叠加到基础速度上
     // 例如，车要左转，angle.out为负，则左轮减速，右轮加速
@@ -88,12 +89,13 @@ void angle_sudu(float target)
 void angle_cal(float target)
 {
     g_angle.target = target;
-    g_angle.now = wit_data.yaw;
+    
+    g_angle.now = wit_data.yaw; // 使用滤波后的值作为PID输入
     pid_cal(&g_angle);
-    if (g_angle.out >= 3)
-        g_angle.out = 3;
-    if (g_angle.out <= -3)
-        g_angle.out = -3;
+    if (g_angle.out >= 40)
+        g_angle.out = 40;
+    if (g_angle.out <= -40)
+        g_angle.out = -40;
 
     // 将角度环的输出直接作为两轮的速度目标值（方向相反），实现原地转向
     motor_target_set(-g_angle.out, g_angle.out);
@@ -139,28 +141,34 @@ void pid_control()
 
 void pid_cal(Pid_t *pid)
 {
+    static float ErrorInt = 0.0;
     // 计算当前偏差
+    pid->error[2] = pid->error[1];
+    pid->error[1] = pid->error[0];
     pid->error[0] = pid->target - pid->now;
     //  pid->error[0]=x;
     // 根据PID模式进行计算
     if (pid->pid_mode == DELTA_PID) // 增量式PID
     {
-        pid->pout = pid->p * (pid->error[0] - pid->error[1]);
-        pid->iout = pid->i * pid->error[0];
-        pid->dout = pid->d * (pid->error[0] - 2 * pid->error[1] + pid->error[2]);
-        pid->out += pid->pout + pid->iout + pid->dout;
+        
+        pid->out += pid->p *(pid->error[0] - pid->error[1]) + pid->i * pid->error[0] + pid->d * (pid->error[0]-2*pid->error[1]+pid->error[2]);
     }
     else if (pid->pid_mode == POSITION_PID) // 位置式PID
     {
-        pid->pout = pid->p * pid->error[0];
-        pid->iout += pid->i * pid->error[0];
-        pid->dout = pid->d * (pid->error[0] - pid->error[1]);
-        pid->out = pid->pout + pid->iout + pid->dout;
+        ErrorInt += pid->error[0];
+        if(ErrorInt > 300)
+        {
+            ErrorInt = 300;
+        }
+        else if(ErrorInt < -300)
+        {
+            ErrorInt = -300;
+        }
+        pid->out = pid->p * pid->error[0]+ pid->i*ErrorInt + pid->d * (pid->error[0] - pid->error[1]);
     }
 
     // 更新历史偏差，为下次计算做准备
-    pid->error[2] = pid->error[1];
-    pid->error[1] = pid->error[0];
+   
 }
 
 void pidout_limit(Pid_t *pid)

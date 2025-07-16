@@ -98,6 +98,8 @@ int main(void)
     No_MCU_Ganv_Sensor_Init_Frist(&g_ganv_sensor);
     No_MCU_Ganv_Sensor_Init(&g_ganv_sensor, g_calibrated_white, g_calibrated_black);
 
+    
+
     OLED_ShowString(0, 0, (uint8_t *)"Initializing...", 16);
     delay_ms(1000);
     OLED_Clear();
@@ -109,25 +111,27 @@ int main(void)
 
     while (1)
     {
-        // Oled_Ganv_Test();
+        Oled_Ganv_Test();
         Key_PID_MDF();
         Gray_Sensor_Test();
-        OLED_Task();
+        // OLED_Task();
+        Gyro_Calibration_Update();
+        
         if (key_mode == 3)
         {
             if (motor_status)
             {
-                angle_cal(130);
+                angle_sudu(0);
             }
         }
-        // if (motor_status)
-        // {
-        //     if (tick_ms - motor_start >= 5000)
-        //     {
-        //         motor_status = 0;
-        //         Motor_Stop();
-        //     }
-        // }
+        if (motor_status)
+        {
+            if (tick_ms - motor_start >= 5000)
+            {
+                motor_status = 0;
+                Motor_Stop();
+            }
+        }
     }
 }
 
@@ -138,7 +142,29 @@ void OLED_Task(void)
     {
         oled_ms = tick_ms;
         OLED_Clear();
-        if (key_mode == 1)
+        if (key_mode == 0)
+        {
+            
+            sprintf((char *)oled_buffer, "En1:%-4.1f", g_motorA.now);
+            OLED_ShowString(0, 0, (uint8_t *)oled_buffer, 16);
+
+            sprintf((char *)oled_buffer, "En2:%-4.1f", g_motorB.now);
+            OLED_ShowString(0, 2, (uint8_t *)oled_buffer, 16);
+
+            sprintf((char *)oled_buffer, "YAW:%-6.1f", wit_data.yaw);
+            OLED_ShowString(4, 4, (uint8_t *)oled_buffer, 16);
+            if(Is_Gyro_Calib_Complete())
+            {
+                sprintf((char *)oled_buffer, "Z0 COMPLETE");
+                OLED_ShowString(0, 6, (uint8_t *)oled_buffer, 16);
+            }
+            else
+            {
+                sprintf((char *)oled_buffer, "Calibrating");
+                OLED_ShowString(0, 6, (uint8_t *)oled_buffer, 16);
+            }
+        }
+        else if (key_mode == 1)
         {
             
             sprintf((char *)oled_buffer, "En1:%-4.1f", g_motorA.now);

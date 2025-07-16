@@ -34,5 +34,6 @@ extern int speed_TAGET;
 extern Pid_t g_angle;
 extern float Pitch, Roll, Yaw;
 extern uint8_t RollL, RollH, PitchL, PitchH, YawL, YawH, VL, VH, SUM;
+extern  float yaw_filtered;
 
 #endif

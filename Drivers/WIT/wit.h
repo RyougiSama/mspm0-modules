@@ -34,8 +34,20 @@ typedef struct {
     int16_t version;
 } WIT_Data_t;
 
+typedef enum {
+    CALIB_STATE_IDLE,               // 0: 空闲状态
+    CALIB_STATE_SEND_UNLOCK,        // 1: 发送解锁指令
+    CALIB_STATE_WAIT_UNLOCK,        // 2: 等待200ms
+    CALIB_STATE_SEND_CALIBRATE,     // 3: 发送校准指令
+    CALIB_STATE_WAIT_CALIBRATE,     // 4: 等待3000ms
+    CALIB_STATE_SEND_SAVE           // 5: 发送保存指令
+} GyroCalibState_t;
+
 extern WIT_Data_t wit_data;
 
 void WIT_Init(void);
+void Gyro_Calibration_Start(void);
+void Gyro_Calibration_Update(void);
+bool Is_Gyro_Calib_Complete(void);
 
 #endif /* #ifndef __WIT_H */
