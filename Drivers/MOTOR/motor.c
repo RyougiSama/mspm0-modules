@@ -16,16 +16,16 @@ void Motor_Init(void)
 
 void Motor_On(void)
 {
-    DL_GPIO_setPins(GPIO_motor_PORT, GPIO_motor_PIN_STBY_PIN);
+    DL_GPIO_setPins(GPIO_motor_PIN_STBY_PORT, GPIO_motor_PIN_STBY_PIN);
 }
 
 void Motor_Stop(void)
 {
-    DL_GPIO_clearPins(GPIO_motor_PORT, GPIO_motor_PIN_STBY_PIN);
-    DL_GPIO_clearPins(GPIO_motor_PORT, GPIO_motor_PIN_AIN1_PIN);
-    DL_GPIO_clearPins(GPIO_motor_PORT, GPIO_motor_PIN_AIN2_PIN);
-    DL_GPIO_clearPins(GPIO_motor_PORT, GPIO_motor_PIN_BIN1_PIN);
-    DL_GPIO_clearPins(GPIO_motor_PORT, GPIO_motor_PIN_BIN2_PIN);
+    DL_GPIO_clearPins(GPIO_motor_PIN_STBY_PORT, GPIO_motor_PIN_STBY_PIN);
+    DL_GPIO_clearPins(GPIO_motor_PIN_AIN1_PORT, GPIO_motor_PIN_AIN1_PIN);
+    DL_GPIO_clearPins(GPIO_motor_PIN_AIN2_PORT, GPIO_motor_PIN_AIN2_PIN);
+    DL_GPIO_clearPins(GPIO_motor_PIN_BIN1_PORT, GPIO_motor_PIN_BIN1_PIN);
+    DL_GPIO_clearPins(GPIO_motor_PIN_BIN2_PORT, GPIO_motor_PIN_BIN2_PIN);
     pid_reset(&g_motorA);
     pid_reset(&g_motorB);
     
@@ -49,13 +49,13 @@ void MotorA_Duty(float duty)
     Set_Duty(duty,0);
     if(g_motorA_dir==1)
     {
-        DL_GPIO_setPins(GPIO_motor_PORT, GPIO_motor_PIN_AIN1_PIN);
-        DL_GPIO_clearPins(GPIO_motor_PORT, GPIO_motor_PIN_AIN2_PIN);
+        DL_GPIO_setPins(GPIO_motor_PIN_AIN1_PORT, GPIO_motor_PIN_AIN1_PIN);
+        DL_GPIO_clearPins(GPIO_motor_PIN_AIN2_PORT, GPIO_motor_PIN_AIN2_PIN);
     }
     else if(g_motorA_dir==0)
     {
-        DL_GPIO_setPins(GPIO_motor_PORT, GPIO_motor_PIN_AIN2_PIN);
-        DL_GPIO_clearPins(GPIO_motor_PORT, GPIO_motor_PIN_AIN1_PIN);
+        DL_GPIO_setPins(GPIO_motor_PIN_AIN2_PORT, GPIO_motor_PIN_AIN2_PIN);
+        DL_GPIO_clearPins(GPIO_motor_PIN_AIN1_PORT, GPIO_motor_PIN_AIN1_PIN);
     }
 }
 
@@ -64,13 +64,13 @@ void MotorB_Duty(float duty)
     Set_Duty(duty, 1);
     if(g_motorB_dir==1)
     {
-        DL_GPIO_setPins(GPIO_motor_PORT, GPIO_motor_PIN_BIN1_PIN);
-        DL_GPIO_clearPins(GPIO_motor_PORT, GPIO_motor_PIN_BIN2_PIN);
+        DL_GPIO_setPins(GPIO_motor_PIN_BIN1_PORT, GPIO_motor_PIN_BIN1_PIN);
+        DL_GPIO_clearPins(GPIO_motor_PIN_BIN2_PORT, GPIO_motor_PIN_BIN2_PIN);
     }
     else if(g_motorB_dir==0)
     {
-        DL_GPIO_setPins(GPIO_motor_PORT, GPIO_motor_PIN_BIN2_PIN);
-        DL_GPIO_clearPins(GPIO_motor_PORT, GPIO_motor_PIN_BIN1_PIN);
+        DL_GPIO_setPins(GPIO_motor_PIN_BIN2_PORT, GPIO_motor_PIN_BIN2_PIN);
+        DL_GPIO_clearPins(GPIO_motor_PIN_BIN1_PORT, GPIO_motor_PIN_BIN1_PIN);
     }
 }
 
