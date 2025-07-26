@@ -8,6 +8,8 @@
 Pid_t g_motorA;
 Pid_t g_motorB;
 Pid_t g_angle;
+volatile int16_t g_speed_A_now = 0;
+volatile int16_t g_speed_B_now = 0;
 float Pitch, Roll, Yaw;
 uint8_t RollL, RollH, PitchL, PitchH, YawL, YawH, VL, VH, SUM;
 uint8_t ready1 = 1; // 灰度移植完删除
@@ -37,6 +39,30 @@ void pid_init(Pid_t *pid, PidMode mode, float p, float i, float d)
     pid->i = i;
     pid->d = d;
     pid_reset(pid);
+}
+
+void Encoder_Update_Speed(void)
+{
+    // 1. 读取自上次调用以来累积的脉冲数
+    int32_t encoder_val_A = g_encoder_A;
+    int32_t encoder_val_B = g_encoder_B;
+
+    // 2. 清零原始计数值，为下一个采样周期做准备
+    g_encoder_A = 0;
+    g_encoder_B = 0;
+
+    // 3. 根据电机方向，确定速度的正负号
+    if (g_motorA_dir) {
+        g_speed_A_now = encoder_val_A;
+    } else {
+        g_speed_A_now = -encoder_val_A;
+    }
+
+    if (g_motorB_dir) {
+        g_speed_B_now = encoder_val_B;
+    } else {
+        g_speed_B_now = -encoder_val_B;
+    }
 }
 
 // 设置两个电机的目标速度
@@ -109,24 +135,8 @@ void pid_control()
 
     // if(ready1==1)			//openmv中
     // track();
-    if (g_motorA_dir)
-    {
-        g_motorA.now = g_encoder_A;
-    }
-    else
-    {
-        g_motorA.now = -g_encoder_A;
-    } // 修改过
-    if (g_motorB_dir)
-    {
-        g_motorB.now = g_encoder_B;
-    }
-    else
-    {
-        g_motorB.now = -g_encoder_B;
-    }
-    g_encoder_A = 0;
-    g_encoder_B = 0;
+    g_motorA.now = g_speed_A_now;
+    g_motorB.now = g_speed_B_now;
     // 3.调用PID控制器进行计算
     pid_cal(&g_motorA);
     pid_cal(&g_motorB);

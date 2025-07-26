@@ -36,6 +36,7 @@
 #include "ganv_user.h"
 #include "adc.h"
 #include "taojingchi.h"
+#include "serial_protocol.h"
 
 
 uint32_t motor_ms, oled_ms;
@@ -94,7 +95,6 @@ int main(void)
     SysTick_Init();
     NVIC_EnableIRQ(TIMER_speedget_INST_INT_IRQN);
     DL_TimerA_startCounter(TIMER_speedget_INST);
-    NVIC_EnableIRQ(TJC_UART_INST_INT_IRQN);
     NVIC_EnableIRQ(TIMER_BASIC_INST_INT_IRQN);
 
     // peripheral initialization
@@ -103,6 +103,7 @@ int main(void)
     // Encoder_Init();
     // Adc_Init();
     // WIT_Init();
+    SerialProtocol_Init();
     // No_MCU_Ganv_Sensor_Init_Frist(&g_ganv_sensor);
     // No_MCU_Ganv_Sensor_Init(&g_ganv_sensor, g_calibrated_white, g_calibrated_black);
 
@@ -142,7 +143,7 @@ int main(void)
         //         Motor_Stop();
         //     }
         // }
-
+        SerialProtocol_Parse();
     }
 }
 

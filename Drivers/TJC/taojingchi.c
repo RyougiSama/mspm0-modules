@@ -4,26 +4,10 @@
 
 // --- 内部状态变量和缓冲区 (对外部文件隐藏) ---
 static uint8_t gTxPacket[128]; 
-static volatile bool gCheckUART = true; // 初始化为true，允许第一次发送
-static volatile bool gDMADone = true;   // 初始化为true，允许第一次发送
+volatile bool gCheckUART = true; // 初始化为true，允许第一次发送
+volatile bool gDMADone = true;   // 初始化为true，允许第一次发送
 
-/**
- * @brief UART中断服务程序 (逻辑与您验证过的一致)
- * @note  这个函数名 (TJC_UART_INST_IRQHandler) 必须与SysConfig生成的名称一致
- */
-void TJC_UART_INST_IRQHandler(void)
-{
-    switch (DL_UART_Main_getPendingInterrupt(TJC_UART_INST)) {
-        case DL_UART_MAIN_IIDX_DMA_DONE_TX:
-            gDMADone = true;
-            break;
-        case DL_UART_MAIN_IIDX_EOT_DONE:
-            gCheckUART = true;
-            break;
-        default:
-            break;
-    }
-}
+
 
 /**
  * @brief 发送自定义指令的实现

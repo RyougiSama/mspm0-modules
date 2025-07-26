@@ -35,5 +35,7 @@ extern Pid_t g_angle;
 extern float Pitch, Roll, Yaw;
 extern uint8_t RollL, RollH, PitchL, PitchH, YawL, YawH, VL, VH, SUM;
 extern  float yaw_filtered;
+extern volatile int16_t g_speed_A_now;
+extern volatile int16_t g_speed_B_now;
 
 #endif

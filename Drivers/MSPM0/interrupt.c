@@ -4,6 +4,7 @@
 #include "wit.h"
 #include "motor.h"
 #include "taojingchi.h"
+#include "app_command_handler.h"
 
 void SysTick_Handler(void)
 {
@@ -95,6 +96,7 @@ void TIMER_speedget_INST_IRQHandler(void)       //编码器速度获取
     switch(DL_TimerA_getPendingInterrupt(TIMER_speedget_INST))
     {
         case DL_TIMER_IIDX_ZERO:
+            Encoder_Update_Speed();
             pid_control();
             break;
         default:
@@ -113,19 +115,23 @@ void TIMER_BASIC_INST_IRQHandler(void)
         {
             ms_counter = 0; // 计数器清零
 
-            static float sine_wave_angle = 0.0f; // 静态变量，保存波形相位
+            if (g_isSineWaveActive)
+            {
+                static float sine_wave_angle = 0.0f; // 静态变量，保存波形相位
 
-            // 1. 计算当前正弦波点的Y轴坐标
-            int y_point = (int)(40.0f * sinf(sine_wave_angle) + 100.0f);
+                // 1. 计算当前正弦波点的Y轴坐标
+                int y_point = (int)(40.0f * sinf(sine_wave_angle) + 100.0f);
 
-            // 2. 调用高层函数发送这一个点
-            TJC_SendWaveformPoint(0, y_point);
+                // 2. 调用高层函数发送这一个点
+                TJC_SendWaveformPoint(0, y_point);
 
-            // 3. 更新相位，为下一次计算做准备
-            sine_wave_angle += 0.05f;
-            if (sine_wave_angle > 6.28318f) { // 2 * PI
-                sine_wave_angle -= 6.28318f;
+                // 3. 更新相位，为下一次计算做准备
+                sine_wave_angle += 0.05f;
+                if (sine_wave_angle > 6.28318f) { // 2 * PI
+                    sine_wave_angle -= 6.28318f;
+                }
             }
+            
         }
             break;
         default:
