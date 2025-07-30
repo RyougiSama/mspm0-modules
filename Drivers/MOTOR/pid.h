@@ -27,6 +27,7 @@ void Position_PI(Pid_t *pid);
 void pidout_limit(Pid_t *pid);
 void angle_cal(float target);
 void angle_sudu(float target);
+void Encoder_Update_Speed(void);
 
 extern Pid_t g_motorA;
 extern Pid_t g_motorB;

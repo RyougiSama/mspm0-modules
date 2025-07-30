@@ -3,8 +3,8 @@
 #include "pid.h"
 
 // 灰度传感器校准值宏定义
-#define GRAY_WHITE_CALIBRATION_VALUE    1000
-#define GRAY_BLACK_CALIBRATION_VALUE    999
+#define GRAY_WHITE_CALIBRATION_VALUE    501
+#define GRAY_BLACK_CALIBRATION_VALUE    500
 
 No_MCU_Sensor g_ganv_sensor;
 unsigned short g_calibrated_white[8] = { GRAY_WHITE_CALIBRATION_VALUE, GRAY_WHITE_CALIBRATION_VALUE, GRAY_WHITE_CALIBRATION_VALUE, GRAY_WHITE_CALIBRATION_VALUE, GRAY_WHITE_CALIBRATION_VALUE, GRAY_WHITE_CALIBRATION_VALUE, GRAY_WHITE_CALIBRATION_VALUE, GRAY_WHITE_CALIBRATION_VALUE };
@@ -60,29 +60,29 @@ void Gray_Sensor_Test(void)
 
     switch (g_digital_value) {
         case 0b11100111:
-            motor_target_set(10, 10);
+            motor_target_set(20, 20);
             break;
         case 0b11101111:
         case 0b11001111:
-            motor_target_set(10, 8);
+            motor_target_set(20, 16);
             break;
         case 0b11110111:
         case 0b11110011:
-            motor_target_set(8, 10);
+            motor_target_set(16, 20);
             break;
         case 0b10111111:
         case 0b00111111:
-            motor_target_set(10, 5);
+            motor_target_set(20, 10);
             break;
         case 0b11111001:
         case 0b11111100:
-            motor_target_set(5, 10);
+            motor_target_set(10, 20);
             break;
         case 0b11111110:
-            motor_target_set(2, 10);
+            motor_target_set(4, 20);
             break;
         case 0b01111111:
-            motor_target_set(10, 2);
+            motor_target_set(20, 4);
             break;
         default:
             break;

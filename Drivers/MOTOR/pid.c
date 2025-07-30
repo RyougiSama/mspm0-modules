@@ -118,10 +118,10 @@ void angle_cal(float target)
     
     g_angle.now = wit_data.yaw; // 使用滤波后的值作为PID输入
     pid_cal(&g_angle);
-    if (g_angle.out >= 40)
-        g_angle.out = 40;
-    if (g_angle.out <= -40)
-        g_angle.out = -40;
+    if (g_angle.out >= 25)
+        g_angle.out = 25;
+    if (g_angle.out <= -25)
+        g_angle.out = -25;
 
     // 将角度环的输出直接作为两轮的速度目标值（方向相反），实现原地转向
     motor_target_set(-g_angle.out, g_angle.out);
@@ -151,7 +151,6 @@ void pid_control()
 
 void pid_cal(Pid_t *pid)
 {
-    static float ErrorInt = 0.0;
     // 计算当前偏差
     pid->error[2] = pid->error[1];
     pid->error[1] = pid->error[0];
@@ -165,16 +164,10 @@ void pid_cal(Pid_t *pid)
     }
     else if (pid->pid_mode == POSITION_PID) // 位置式PID
     {
-        ErrorInt += pid->error[0];
-        if(ErrorInt > 300)
-        {
-            ErrorInt = 300;
-        }
-        else if(ErrorInt < -300)
-        {
-            ErrorInt = -300;
-        }
-        pid->out = pid->p * pid->error[0]+ pid->i*ErrorInt + pid->d * (pid->error[0] - pid->error[1]);
+        pid->iout += pid->error[0]; // 使用结构体成员 iout
+        if(pid->iout > 300) pid->iout = 300;
+        else if(pid->iout < -300) pid->iout = -300;
+        pid->out = pid->p * pid->error[0]+ pid->i * pid->iout + pid->d * (pid->error[0] - pid->error[1]);
     }
 
     // 更新历史偏差，为下次计算做准备
