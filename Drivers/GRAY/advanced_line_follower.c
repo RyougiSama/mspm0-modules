@@ -7,7 +7,7 @@
 // #include "math.h"  // 不再需要fabs()
 
 // ================== 任务可配置参数 ==================
-#define TARGET_LAPS              4      // 目标圈数
+#define TARGET_LAPS              20      // 目标圈数
 #define CORNER_FORWARD_DURATION  150    // 到达拐角后，向前直行的毫秒数 (需调试)
 #define PIVOT_TURN_SPEED         15     // 原地旋转时的电机目标速度 (需调试)
 #define TASK_EXECUTION_INTERVAL  10     // 任务执行间隔 (ms)

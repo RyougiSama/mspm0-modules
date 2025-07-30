@@ -182,21 +182,10 @@ void Key_PID_MDF()
                 Gyro_Calibration_Start();
                 break;
             case 6:
-                if (g_is_turning_90_degrees == false)
-                {
-                    Motor_On();
-                    // 3. 重置角度PID控制器
-                    pid_reset(&g_angle);
-
-                    // 4. 设置目标角度为【当前角度 + 90度】
-                    //    这正是你提出的核心思路！
-                    g_angle.target = wit_data.yaw + 90.0f;
-
-                    // 5. 设置全局标志位，通知主循环开始执行转向
-                    g_is_turning_90_degrees = true;
-                }
+                
                 break;
             case 7:
+                
                 ALF_Start();
                 break;
 
