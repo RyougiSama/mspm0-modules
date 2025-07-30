@@ -156,6 +156,26 @@ void pid_cal(Pid_t *pid)
     pid->error[1] = pid->error[0];
     pid->error[0] = pid->target - pid->now;
     //  pid->error[0]=x;
+
+    if (pid == &g_angle)
+    {
+        // 是角度环，则使用能处理环绕问题的特殊算法
+        float error = pid->target - pid->now;
+
+        // 将误差归一化到[-180, 180]的区间，即走最短路径
+        while (error > 180.0f) {
+            error -= 360.0f;
+        }
+        while (error < -180.0f) {
+            error += 360.0f;
+        }
+        pid->error[0] = error;
+    }
+    else
+    {
+        // 不是角度环（即电机速度环），使用标准算法
+        pid->error[0] = pid->target - pid->now;
+    }
     // 根据PID模式进行计算
     if (pid->pid_mode == DELTA_PID) // 增量式PID
     {

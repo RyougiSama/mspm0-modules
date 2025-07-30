@@ -1,5 +1,6 @@
 
 #include "key.h"
+#include "advanced_line_follower.h"
 
 // Make sure you have access to a global millisecond timer.
 // If g_tick_ms is defined in main.c, you need this line in key.c
@@ -195,6 +196,13 @@ void Key_PID_MDF()
                     g_is_turning_90_degrees = true;
                 }
                 break;
+            case 7:
+                ALF_Start();
+                break;
+
+            case 8:
+                ALF_Stop();
+                break;
             case 16:
                 key_mode = 1;
                 break;
@@ -361,24 +369,39 @@ void Key_PID_MDF()
                 g_angle.d -= 0.01;
                 break;
             case 13:
-                motor_status = 1;
-                motor_start = tick_ms;
-                Motor_On();
-                pid_init(&g_motorA, DELTA_PID, 0, 0.19, 0);
-                pid_init(&g_motorB, DELTA_PID, 0, 0.19, 0);
-                pid_init(&g_angle, POSITION_PID, 0.22, 0 ,1.37);
+
+               if (g_is_turning_90_degrees == false)
+                {
+                    Motor_On();
+                    // 3. 重置角度PID控制器
+                    pid_reset(&g_angle);
+
+                    // 4. 设置目标角度为【当前角度 + 90度】
+                    //    这正是你提出的核心思路！
+                    g_angle.target = wit_data.yaw + 90.0f;
+
+                    // 5. 设置全局标志位，通知主循环开始执行转向
+                    g_is_turning_90_degrees = true;
+                }
                 break;    
             case 14:    
                 motor_status = 0;
                 Motor_Stop();
                 break;
             case 15:
-                motor_status = 1;
-                motor_start = tick_ms;
-                Motor_On();
-                pid_init(&g_motorA, DELTA_PID, 0, 0.19, 0);
-                pid_init(&g_motorB, DELTA_PID, 0, 0.19, 0);
-                pid_init(&g_angle, POSITION_PID, g_angle.p, g_angle.i, g_angle.d);
+                if (g_is_turning_90_degrees == false)
+                {
+                    Motor_On();
+                    // 3. 重置角度PID控制器
+                    pid_reset(&g_angle);
+
+                    // 4. 设置目标角度为【当前角度 + 90度】
+                    //    这正是你提出的核心思路！
+                    g_angle.target = wit_data.yaw - 90.0f;
+
+                    // 5. 设置全局标志位，通知主循环开始执行转向
+                    g_is_turning_90_degrees = true;
+                }
                 break;
             case 16:
                 key_mode = 4;

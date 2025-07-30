@@ -36,6 +36,7 @@
 #include "ganv_user.h"
 #include "adc.h"
 #include "math.h"
+#include "advanced_line_follower.h"
 
 
 uint32_t motor_ms, oled_ms;
@@ -85,7 +86,7 @@ int main(void)
      Motor_Init();
      Encoder_Init();
      Adc_Init();
-     WIT_Init();
+     //WIT_Init();
      No_MCU_Ganv_Sensor_Init_Frist(&g_ganv_sensor);
      No_MCU_Ganv_Sensor_Init(&g_ganv_sensor, g_calibrated_white, g_calibrated_black);
 
@@ -98,7 +99,7 @@ int main(void)
 
      pid_init(&g_motorA, DELTA_PID, 1.22, 0.19, 0);
      pid_init(&g_motorB, DELTA_PID, 1.22, 0.19, 0);
-     pid_init(&g_angle, POSITION_PID, 1.69, 0, 4.01);
+     //pid_init(&g_angle, POSITION_PID, 0.25, 0, 1.27);
      //motor_target_set(10,10);
     // motor_target_set(100,100);
    
@@ -106,23 +107,12 @@ int main(void)
     {
         // Oled_Ganv_Test();
         Key_PID_MDF();
-        Gray_Sensor_Test();
+        //Gray_Sensor_Test();
+        ALF_Task();
         OLED_Task();
         Gyro_Calibration_Update();
         Gray_Sensor_Update_Value();
-        if (g_is_turning_90_degrees)
-        {
-            // 2. 是，则调用角度环函数来驱动电机
-            angle_cal(g_angle.target);
-
-            // 3. 判断任务是否完成
-            if (fabs(g_angle.target - wit_data.yaw) < 0.5f)
-            {
-                // 4. 完成后，停止电机并清除标志位
-                Motor_Stop();
-                g_is_turning_90_degrees = false;
-            }
-        }
+        
         //DL_GPIO_togglePins(GPIO_LED_PORT, GPIO_LED_PIN_LED_PIN);
         // delay_ms(100);
         // if (key_mode == 3)
@@ -159,17 +149,23 @@ void OLED_Task(void)
             sprintf((char *)oled_buffer, "En2:%-4.1f", g_motorB.now);
             OLED_ShowString(0, 2, (uint8_t *)oled_buffer, 16);
 
-            sprintf((char *)oled_buffer, "YAW:%-6.1f", wit_data.yaw);
+            sprintf((char *)oled_buffer, "loop:%2d", g_lap_count);
             OLED_ShowString(4, 4, (uint8_t *)oled_buffer, 16);
-            if(Is_Gyro_Calib_Complete())
+            if(g_car_state == STATE_IDLE)
             {
-                sprintf((char *)oled_buffer, "Z0 COMPLETE");
-                OLED_ShowString(0, 6, (uint8_t *)oled_buffer, 16);
+                OLED_ShowString(0, 6, (uint8_t *)"IDLE", 16);
             }
-            else
-            {
-                sprintf((char *)oled_buffer, "Calibrating");
-                OLED_ShowString(0, 6, (uint8_t *)oled_buffer, 16);
+            else if (g_car_state == STATE_TRACKING) {
+                OLED_ShowString(0, 6, (uint8_t *)"track", 16);
+            }
+            else if (g_car_state == STATE_CORNER_STOP) {
+                OLED_ShowString(0, 6, (uint8_t *)"STOP", 16);
+            }
+            else if (g_car_state == STATE_CORNER_FORWARD) {
+                OLED_ShowString(0, 6, (uint8_t *)"FOWARD", 16);
+            }
+            else if (g_car_state == STATE_FINISHED) {
+                OLED_ShowString(0, 6, (uint8_t *)"FINISHED", 16);
             }
         }
         else if (key_mode == 1)
@@ -196,7 +192,7 @@ void OLED_Task(void)
             OLED_ShowString(0, 0, (uint8_t *)oled_buffer, 16);
 
             // --- 显示P值 ---
-            sprintf((char *)oled_buffer, "BP:%-4.2f", g_motorB.now);
+            sprintf((char *)oled_buffer, "BP:%-4.2f", g_motorB.p);
             OLED_ShowString(0, 2, (uint8_t *)oled_buffer, 16);
 
             // --- 显示I值 ---
