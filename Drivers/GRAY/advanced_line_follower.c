@@ -73,28 +73,28 @@ void ALF_Task(void) {
         case 0b11101111:
         case 0b11011111:
         case 0b11001111:
-            motor_target_set(20, 16);
+            motor_target_set(20, 17);
             break;
         case 0b11110111:
         case 0b11111011:
         case 0b11110011:
-            motor_target_set(16, 20);
+            motor_target_set(17, 20);
             break;
         case 0b10011111:
         case 0b10111111:
-            motor_target_set(20, 10);
+            motor_target_set(20, 11);
             break;
         case 0b11111001:
         case 0b11111101:
-            motor_target_set(10, 20);
+            motor_target_set(11, 20);
             break;
         case 0b11111100:
         case 0b11111110:
-            motor_target_set(4, 20);
+            motor_target_set(5, 20);
             break;
         case 0b01111111:
         case 0b00111111:
-            motor_target_set(20, 4);
+            motor_target_set(20, 5);
             break;
         default:
             break;
