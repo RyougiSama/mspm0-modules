@@ -47,6 +47,8 @@ uint8_t key_mode = 0;
 
 uint32_t counter = 0;
 
+volatile bool g_run_control_flag = false; // 定义全局旗帜
+
 void OLED_Task(void);
 
 void Oled_Motor_Test()
@@ -95,16 +97,17 @@ int main(void)
     delay_ms(1000);
     OLED_Clear();
 
-    // Motor_On();
+    //Motor_On();
 
-     pid_init(&g_motorA, DELTA_PID, 1.2, 0.5, 0);
-     pid_init(&g_motorB, DELTA_PID, 1.2, 0.5, 0);
+     pid_init(&g_motorA, DELTA_PID, 1.21, 0.5, 0);
+     pid_init(&g_motorB, DELTA_PID, 1.22, 0.5, 0);
      //pid_init(&g_angle, POSITION_PID, 0.25, 0, 1.27);
      //motor_target_set(10,10);
     // motor_target_set(100,100);
    
     while (1)
     {
+
         // Oled_Ganv_Test();
         Key_PID_MDF();
         //Gray_Sensor_Test();
