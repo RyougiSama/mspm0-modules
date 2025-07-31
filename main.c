@@ -97,7 +97,7 @@ int main(void)
 
     // Motor_On();
 
-     pid_init(&g_motorA, DELTA_PID, 1.22, 0.19, 0);
+     pid_init(&g_motorA, DELTA_PID, 1.21, 0.19, 0);
      pid_init(&g_motorB, DELTA_PID, 1.22, 0.19, 0);
      //pid_init(&g_angle, POSITION_PID, 0.25, 0, 1.27);
      //motor_target_set(10,10);
@@ -228,6 +228,11 @@ void OLED_Task(void)
                 }
                 OLED_ShowNum(10 * 5, 0, g_motorA.now, 3, 16);
                 OLED_ShowNum(10 * 5, 4, g_motorB.now, 3, 16);
+        }
+        else if (key_mode == 5)
+        {
+                OLED_ShowString(0, 0, (uint8_t *)"Input Cycle", 16);
+                
         }
     }
 }

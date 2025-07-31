@@ -182,11 +182,16 @@ void Key_PID_MDF()
                 Gyro_Calibration_Start();
                 break;
             case 6:
-                
+                pid_reset(&g_motorA);
+                pid_reset(&g_motorB);
+                g_lap_count = 0;
+                key_mode = 5;
                 break;
             case 7:
-                
-                ALF_Start();
+                pid_reset(&g_motorA);
+                pid_reset(&g_motorB);
+                g_lap_count = 1;
+                key_mode = 5;
                 break;
 
             case 8:
@@ -418,6 +423,40 @@ void Key_PID_MDF()
                 g_angle.p -= 0.01;
                 break;
             
+            case 16:
+                key_mode = 0;
+                break;
+            default:
+                break;
+            }
+        }
+        else if(key_mode == 5)
+        {
+            switch (key_val) {
+            case 1:
+                g_lap_target = 4;
+                ALF_Start();
+                key_mode = 0;
+                break;
+            case 2:
+                g_lap_target = 8;
+                ALF_Start();
+                key_mode = 0;
+                break;
+            case 3:
+                g_lap_target = 12;
+                ALF_Start();
+                key_mode = 0;
+                break;
+            case 4:
+                g_lap_target = 16;
+                ALF_Start();
+                key_mode = 0;
+                break;
+            case 5:
+                g_lap_target = 20;
+                ALF_Start();
+                key_mode = 0;
             case 16:
                 key_mode = 0;
                 break;

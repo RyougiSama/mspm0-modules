@@ -24,6 +24,7 @@ bool ALF_IsFinished(void);
 
 extern CarState g_car_state;
 
-extern uint32_t g_lap_count;
+extern uint8_t g_lap_count;
+extern uint8_t g_lap_target;
 
 #endif

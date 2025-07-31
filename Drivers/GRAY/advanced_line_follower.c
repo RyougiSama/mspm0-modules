@@ -18,13 +18,14 @@
 CarState g_car_state = STATE_IDLE;
 static uint32_t g_task_timer = 0;
 static uint32_t g_state_timer = 0;
-uint32_t g_lap_count = 1;
+uint8_t g_lap_count = 1;
+uint8_t g_lap_target = 1;
 //static bool g_is_first_corner = true;
 
 // 启动任务函数
 void ALF_Start(void) {
     if (g_car_state == STATE_IDLE || g_car_state == STATE_FINISHED) {
-        g_lap_count = 1;
+        //g_lap_count = 1;
         //g_is_first_corner = true;
         g_car_state = STATE_TRACKING;
         Motor_On();
@@ -68,25 +69,25 @@ void ALF_Task(void) {
              g_car_state = STATE_CORNER_STOP;
              break;
          case 0b11100111:
-            motor_target_set(20, 20);
+            motor_target_set(25, 25);
             break;
         case 0b11101111:
         case 0b11001111:
-            motor_target_set(20, 17);
+            motor_target_set(20, 18);
             break;
         case 0b11110111:
         case 0b11110011:
-            motor_target_set(17, 20);
+            motor_target_set(18, 20);
             break;
         case 0b10011111:
         case 0b11011111:
         case 0b10111111:
-            motor_target_set(20, 12);
+            motor_target_set(20, 14);
             break;
         case 0b11111001:
         case 0b11111101:
         case 0b11111011:
-            motor_target_set(12, 20);
+            motor_target_set(14, 20);
             break;
         case 0b11111100:
         case 0b11111110:
@@ -106,7 +107,7 @@ void ALF_Task(void) {
            // if (g_is_first_corner) g_is_first_corner = false;
             g_lap_count++;
 
-            if (g_lap_count > TARGET_LAPS) {
+            if (g_lap_count > g_lap_target) {
                 g_car_state = STATE_FINISHED;
                 Motor_Stop();
             } else {
