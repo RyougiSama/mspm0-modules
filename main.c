@@ -97,8 +97,8 @@ int main(void)
 
     // Motor_On();
 
-     pid_init(&g_motorA, DELTA_PID, 1.1, 0.5, 0);
-     pid_init(&g_motorB, DELTA_PID, 1.1, 0.5, 0);
+     pid_init(&g_motorA, DELTA_PID, 1.2, 0.5, 0);
+     pid_init(&g_motorB, DELTA_PID, 1.2, 0.5, 0);
      //pid_init(&g_angle, POSITION_PID, 0.25, 0, 1.27);
      //motor_target_set(10,10);
     // motor_target_set(100,100);
