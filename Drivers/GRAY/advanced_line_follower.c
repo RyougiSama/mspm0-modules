@@ -18,14 +18,14 @@
 CarState g_car_state = STATE_IDLE;
 static uint32_t g_task_timer = 0;
 static uint32_t g_state_timer = 0;
-uint32_t g_lap_count = 0;
-static bool g_is_first_corner = true;
+uint32_t g_lap_count = 1;
+//static bool g_is_first_corner = true;
 
 // 启动任务函数
 void ALF_Start(void) {
     if (g_car_state == STATE_IDLE || g_car_state == STATE_FINISHED) {
-        g_lap_count = 0;
-        g_is_first_corner = true;
+        g_lap_count = 1;
+        //g_is_first_corner = true;
         g_car_state = STATE_TRACKING;
         Motor_On();
     }
@@ -71,30 +71,30 @@ void ALF_Task(void) {
             motor_target_set(20, 20);
             break;
         case 0b11101111:
-        case 0b11011111:
         case 0b11001111:
             motor_target_set(20, 17);
             break;
         case 0b11110111:
-        case 0b11111011:
         case 0b11110011:
             motor_target_set(17, 20);
             break;
         case 0b10011111:
+        case 0b11011111:
         case 0b10111111:
-            motor_target_set(20, 11);
+            motor_target_set(20, 12);
             break;
         case 0b11111001:
         case 0b11111101:
-            motor_target_set(11, 20);
+        case 0b11111011:
+            motor_target_set(12, 20);
             break;
         case 0b11111100:
         case 0b11111110:
-            motor_target_set(5, 20);
+            motor_target_set(0, 20);
             break;
         case 0b01111111:
         case 0b00111111:
-            motor_target_set(20, 5);
+            motor_target_set(20, 0);
             break;
         default:
             break;
@@ -103,10 +103,10 @@ void ALF_Task(void) {
 
         case STATE_CORNER_STOP:
             Motor_Stop();
-            if (g_is_first_corner) g_is_first_corner = false;
-            else g_lap_count++;
+           // if (g_is_first_corner) g_is_first_corner = false;
+            g_lap_count++;
 
-            if (g_lap_count >= TARGET_LAPS) {
+            if (g_lap_count > TARGET_LAPS) {
                 g_car_state = STATE_FINISHED;
                 Motor_Stop();
             } else {
