@@ -8,7 +8,7 @@
 
 // ================== 任务可配置参数 ==================
 #define TARGET_LAPS              20      // 目标圈数
-#define CORNER_FORWARD_DURATION  150    // 到达拐角后，向前直行的毫秒数 (需调试)
+#define CORNER_FORWARD_DURATION  125    // 到达拐角后，向前直行的毫秒数 (需调试)
 #define PIVOT_TURN_SPEED         15     // 原地旋转时的电机目标速度 (需调试)
 #define TASK_EXECUTION_INTERVAL  10     // 任务执行间隔 (ms)
 // ====================================================
@@ -73,29 +73,29 @@ void ALF_Task(void) {
             break;
         case 0b11101111:
         case 0b11001111:
-            motor_target_set(20, 18);
+            motor_target_set(25, 23);
             break;
         case 0b11110111:
         case 0b11110011:
-            motor_target_set(18, 20);
+            motor_target_set(23, 25);
             break;
         case 0b10011111:
         case 0b11011111:
         case 0b10111111:
-            motor_target_set(20, 14);
+            motor_target_set(25, 20);
             break;
         case 0b11111001:
         case 0b11111101:
         case 0b11111011:
-            motor_target_set(14, 20);
+            motor_target_set(20, 25);
             break;
         case 0b11111100:
         case 0b11111110:
-            motor_target_set(0, 20);
+            motor_target_set(11, 25);
             break;
         case 0b01111111:
         case 0b00111111:
-            motor_target_set(20, 0);
+            motor_target_set(25, 11);
             break;
         default:
             break;
