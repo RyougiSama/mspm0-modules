@@ -91,11 +91,11 @@ void ALF_Task(void) {
             break;
         case 0b11111100:
         case 0b11111110:
-            motor_target_set(10, 25);
+            motor_target_set(13, 25);
             break;
         case 0b01111111:
         case 0b00111111:
-            motor_target_set(25, 10);
+            motor_target_set(25, 13);
             break;
         default:
             break;
@@ -132,7 +132,7 @@ void ALF_Task(void) {
 
             // 2. 判断是否找到了新的黑线
             // 只要不是全白(0xFF)，就认为传感器阵列已经接触到新的黑线
-            if (g_digital_value != 0b11111111)
+            if ((g_digital_value != 0b11111111)&&(g_digital_value != 0b01111111)&&(g_digital_value != 0b00111111))
             {
                 // 找到了！立即切换回正常循迹状态
                 // 下一个循环，STATE_TRACKING的逻辑会根据当前g_digital_value的值来接管控制
