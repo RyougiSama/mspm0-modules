@@ -112,7 +112,7 @@ void ALF_Task(void) {
                 Motor_Stop();
             } else {
                 g_state_timer = tick_ms;
-                g_car_state = STATE_CORNER_FORWARD;
+                g_car_state = STATE_CORNER_TURNING;
             }
             break;
 
@@ -125,6 +125,7 @@ void ALF_Task(void) {
             break;
 
         case STATE_CORNER_TURNING:
+            Motor_On();
         {
             // 1. 设置差速，让小车开始逆时针原地旋转
             motor_target_set(-PIVOT_TURN_SPEED, PIVOT_TURN_SPEED); 
