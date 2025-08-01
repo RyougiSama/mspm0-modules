@@ -8,8 +8,8 @@
 
 // ================== 任务可配置参数 ==================
 #define TARGET_LAPS              20      // 目标圈数
-#define CORNER_FORWARD_DURATION  150    // 到达拐角后，向前直行的毫秒数 (需调试)
-#define PIVOT_TURN_SPEED         12     // 原地旋转时的电机目标速度 (需调试)
+#define CORNER_FORWARD_DURATION  120    // 到达拐角后，向前直行的毫秒数 (需调试)
+#define PIVOT_TURN_SPEED         8     // 原地旋转时的电机目标速度 (需调试)
 #define TASK_EXECUTION_INTERVAL  10     // 任务执行间隔 (ms)
 // ====================================================
 
@@ -61,11 +61,11 @@ void ALF_Task(void) {
         case STATE_TRACKING:
             switch (g_digital_value) {
         case 0b11111111:
-        case 0b00011111:
-        case 0b00001111:
-        case 0b00000111:
-        case 0b00000011:
-        case 0b00000001:
+        // case 0b00011111:
+        // case 0b00001111:
+        // case 0b00000111:
+        // case 0b00000011:
+        // case 0b00000001:
              g_car_state = STATE_CORNER_STOP;
              break;
          case 0b11100111:
@@ -91,11 +91,11 @@ void ALF_Task(void) {
             break;
         case 0b11111100:
         case 0b11111110:
-            motor_target_set(10, 25);
+            motor_target_set(5, 25);
             break;
         case 0b01111111:
         case 0b00111111:
-            motor_target_set(25, 10);
+            motor_target_set(25, 5);
             break;
         default:
             break;
@@ -112,13 +112,13 @@ void ALF_Task(void) {
                 Motor_Stop();
             } else {
                 g_state_timer = tick_ms;
-                g_car_state = STATE_CORNER_FORWARD;
+                g_car_state = STATE_CORNER_TURNING;
             }
             break;
 
         case STATE_CORNER_FORWARD:
             Motor_On(); 
-            motor_target_set(20, 20);
+            motor_target_set(10, 10);
             if (tick_ms - g_state_timer > CORNER_FORWARD_DURATION) {
                 g_car_state = STATE_CORNER_TURNING;
             }
@@ -126,12 +126,13 @@ void ALF_Task(void) {
 
         case STATE_CORNER_TURNING:
         {
+            Motor_On();
             // 1. 设置差速，让小车开始逆时针原地旋转
             motor_target_set(-PIVOT_TURN_SPEED, PIVOT_TURN_SPEED); 
 
             // 2. 判断是否找到了新的黑线
             // 只要不是全白(0xFF)，就认为传感器阵列已经接触到新的黑线
-            if (g_digital_value != 0b11111111)
+            if ((g_digital_value != 0b11111111)&&(g_digital_value != 0b01111111))
             {
                 // 找到了！立即切换回正常循迹状态
                 // 下一个循环，STATE_TRACKING的逻辑会根据当前g_digital_value的值来接管控制
